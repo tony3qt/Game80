@@ -10,7 +10,7 @@ public class Shuffle {
     
     Card[] allCards;
     
-    public Shuffle(int Npackage, int Nplayer) {
+    public Shuffle(int Npackage) {
 	allCards =  new Card[Npackage*CARD_IN_EACH_PACKAGE];
 	for(int i=0;i<Npackage;i++) {
 	    for(int t=0;t<TYPE_NUM;t++) {
@@ -20,7 +20,7 @@ public class Shuffle {
 		   
 		    }
 		}
-	    }
+	   
 	    allCards[i*CARD_IN_EACH_PACKAGE+TYPE_NUM*CARD_IN_EACH_TYPE]
 		= new Card(Card.Suit.values()[4],1);
 	   
@@ -28,7 +28,6 @@ public class Shuffle {
 		= new Card(Card.Suit.values()[4],2);
 	    
 	}
-
 	if(DEBUG) {
 	    System.out.println("**************************************************");
 	    System.out.println("**************************************************");
