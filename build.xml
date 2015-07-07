@@ -1,0 +1,26 @@
+<project name="Game80" default="all" basedir=".">
+  
+<property name="JAVAC" value="/usr/bin/javac"/>
+<property name="JAVA" value="/usr/bin/java"/>
+  <path id="CLASSPATH">
+    <pathelement location="classes"/>
+  </path>
+
+
+<target name="compile" description="Compile java source files">
+    <mkdir dir="classes"/>
+    <echo message="Game80 is using ${JAVAC} as Java compiler"/>
+    <javac srcdir="src" destdir="classes" fork="yes" executable="${JAVAC}"
+           classpathref="CLASSPATH" debug="on" includeantruntime="false">
+      <compilerarg value="-Xlint:unchecked"/>
+      <compilerarg value="-Xlint:deprecation"/>
+    </javac>
+  </target>
+
+<target name="start-game" description="Start a new game">
+    <java classname="Playboard"
+    classpathref="CLASSPATH" fork="true" dir=".">
+    </java>
+  </target>	
+
+</project>
