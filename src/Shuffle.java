@@ -3,48 +3,50 @@ import java.util.Random;
 
 public class Shuffle {
 
-    private static final int CARD_IN_EACH_TYPE = 13;
-    private static final int CARD_IN_EACH_PACKAGE = 54;
-    private static final int TYPE_NUM = 4;
-    private static final boolean DEBUG = true;
+    private int Npackage;
     
     Card[] allCards;
     
-    public Shuffle(int Npackage) {
-	allCards =  new Card[Npackage*CARD_IN_EACH_PACKAGE];
+    public Shuffle(GameInfo gameInfo) {
+	this.Npackage = gameInfo.NPackage;
+	allCards =  new Card[Npackage*GameInfo.CARD_IN_EACH_PACKAGE];
 	for(int i=0;i<Npackage;i++) {
-	    for(int t=0;t<TYPE_NUM;t++) {
-		for(int n=0;n<CARD_IN_EACH_TYPE;n++) {
-		    allCards[i*CARD_IN_EACH_PACKAGE+t*CARD_IN_EACH_TYPE + n]
+	    for(int t=0;t<GameInfo.SUIT_NUMBER;t++) {
+		for(int n=0;n<GameInfo.CARD_IN_EACH_SUIT;n++) {
+		    allCards[i*GameInfo.CARD_IN_EACH_PACKAGE+t*GameInfo.CARD_IN_EACH_SUIT + n]
 			= new Card(Card.Suit.values()[t],n+2);
 		   
 		    }
 		}
+	  
+	    allCards[i*GameInfo.CARD_IN_EACH_PACKAGE+GameInfo.SUIT_NUMBER*GameInfo.CARD_IN_EACH_SUIT]
+		= new Card(Card.Suit.values()[4],0);
 	   
-	    allCards[i*CARD_IN_EACH_PACKAGE+TYPE_NUM*CARD_IN_EACH_TYPE]
-		= new Card(Card.Suit.values()[4],1);
-	   
-	    allCards[i*CARD_IN_EACH_PACKAGE+TYPE_NUM*CARD_IN_EACH_TYPE + 1]
-		= new Card(Card.Suit.values()[4],2);
+	    allCards[i*GameInfo.CARD_IN_EACH_PACKAGE+GameInfo.SUIT_NUMBER*GameInfo.CARD_IN_EACH_SUIT + 1]
+		= new Card(Card.Suit.values()[5],0);
 	    
 	}
-	if(DEBUG) {
+	if(GameInfo.DEBUG) {
 	    System.out.println("**************************************************");
 	    System.out.println("**************************************************");
 	}
-	Card _tempCard = new Card();
-	int _tempIndex;
+	Card tempCard = new Card();
+	int tempIndex;
 	Random randomGenerator = new Random();
-	for(int i=0;i<Npackage*CARD_IN_EACH_PACKAGE;i++) {
-	    _tempCard = allCards[i];
-	    _tempIndex = (randomGenerator.nextInt()%(Npackage*CARD_IN_EACH_PACKAGE-i)+Npackage*CARD_IN_EACH_PACKAGE-i)%(Npackage*CARD_IN_EACH_PACKAGE-i);
-	    allCards[i] = allCards[i+_tempIndex];
-	    allCards[i+_tempIndex] = _tempCard;
+	for(int i=0;i<Npackage*GameInfo.CARD_IN_EACH_PACKAGE;i++) {
+	    tempCard = allCards[i];
+	    tempIndex = (randomGenerator.nextInt()%(Npackage*GameInfo.CARD_IN_EACH_PACKAGE-i)+Npackage*GameInfo.CARD_IN_EACH_PACKAGE-i)%(Npackage*GameInfo.CARD_IN_EACH_PACKAGE-i);
+	    allCards[i] = allCards[i+tempIndex];
+	    allCards[i+tempIndex] = tempCard;
 	
-	    if(DEBUG) {
-		System.out.print(allCards[i].getType());
+	    if(GameInfo.DEBUG) {
+		System.out.print(allCards[i].getSuit());
 		System.out.println(allCards[i].getNumber());
 	    }
+	}
+	if(GameInfo.DEBUG) {
+	    System.out.println("**************************************************");
+	    System.out.println("**************************************************");
 	}
     }
 }
