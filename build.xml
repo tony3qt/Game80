@@ -19,7 +19,8 @@
 
 <target name="start-game" description="Start a new game">
     <java classname="Playboard"
-    classpathref="CLASSPATH" fork="true" dir=".">
+    classpathref="CLASSPATH" fork="false" dir=".">
+    	<arg value="${arg1}"/>	
     </java>
   </target>	
 

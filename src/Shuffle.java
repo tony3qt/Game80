@@ -6,7 +6,12 @@ public class Shuffle {
     private int Npackage;
     
     Card[] allCards;
-    
+
+    /** Constructor;
+     *  Generate all the cards in order;
+     *  Shuffle them to a random order;
+     *  In debug mode, the shuffled cards will be printed out.
+     */
     public Shuffle(GameInfo gameInfo) {
 	this.Npackage = gameInfo.NPackage;
 	allCards =  new Card[Npackage*GameInfo.CARD_IN_EACH_PACKAGE];
@@ -26,7 +31,9 @@ public class Shuffle {
 		= new Card(Card.Suit.values()[5],0);
 	    
 	}
-	if(GameInfo.DEBUG) {
+
+	/* Shuffle Process */
+	if(gameInfo.DEBUG) {
 	    System.out.println("**************************************************");
 	    System.out.println("**************************************************");
 	}
@@ -35,16 +42,17 @@ public class Shuffle {
 	Random randomGenerator = new Random();
 	for(int i=0;i<Npackage*GameInfo.CARD_IN_EACH_PACKAGE;i++) {
 	    tempCard = allCards[i];
-	    tempIndex = (randomGenerator.nextInt()%(Npackage*GameInfo.CARD_IN_EACH_PACKAGE-i)+Npackage*GameInfo.CARD_IN_EACH_PACKAGE-i)%(Npackage*GameInfo.CARD_IN_EACH_PACKAGE-i);
+	    tempIndex =
+		(randomGenerator.nextInt()%(Npackage*GameInfo.CARD_IN_EACH_PACKAGE-i)+Npackage*GameInfo.CARD_IN_EACH_PACKAGE-i)%(Npackage*GameInfo.CARD_IN_EACH_PACKAGE-i);
 	    allCards[i] = allCards[i+tempIndex];
 	    allCards[i+tempIndex] = tempCard;
 	
-	    if(GameInfo.DEBUG) {
+	    if(gameInfo.DEBUG) {
 		System.out.print(allCards[i].getSuit());
 		System.out.println(allCards[i].getNumber());
 	    }
 	}
-	if(GameInfo.DEBUG) {
+	if(gameInfo.DEBUG) {
 	    System.out.println("**************************************************");
 	    System.out.println("**************************************************");
 	}

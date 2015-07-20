@@ -1,22 +1,35 @@
 
+/** Player controls its onwn cards and makes decision on how to play in the game; 
+ *  HumanPlayer and ComputerPlayer inherits from Player
+ *  Player has a manager, and instance of CardManager, all the card operation is done through manager;
+ */
+
 public class Player {
 
     protected Card[] cardpack;
+    protected Card[] table_Cards;
+    
     protected int playerID;
-    protected int total_Card_Number;
-    protected int current_Card_Number;
-    protected int NPlayer;
+    protected CardManager manager;
     protected Shuffle shuffleGenerator;
+
     protected int[] suit_Counts;
     protected int[] keyNumber_Counts;
-    protected int queen_Counts;
-    protected int king_Counts;
-    protected int keyNumber;
-    protected int lowerBound = 12;
+    protected int L_Joker_Counts;
+    protected int H_Joker_Counts;
+
     protected GameInfo gameInfo;
-    protected CardManager manager;
-    
-    public Player(GameInfo gameInfo,int playerID, Shuffle shuffleGenerator) {
+    protected int keyNumber;
+    protected int NPlayer;
+    protected int total_Card_Number;
+    protected int current_Card_Number;
+
+
+    /** Player gets cards from shuffleGenerator, an instance of Shuffle class,
+     *  which has a sequence of shuffled cards;
+     *  Each Player has its own ID;
+     */
+    public Player(GameInfo gameInfo, int playerID, Shuffle shuffleGenerator) {
 	this.gameInfo = gameInfo;
 	this.playerID = playerID;
 	this.keyNumber = gameInfo.key_Number;
@@ -27,20 +40,46 @@ public class Player {
 	this.shuffleGenerator = shuffleGenerator;
 	this.suit_Counts = new int[4];
 	this.keyNumber_Counts = new int[4];
-	this.queen_Counts = 0;
-	this.king_Counts = 0;
+	this.L_Joker_Counts = 0;
+	this.H_Joker_Counts = 0;
     }
+    
     public void printID() {
 	System.out.print("Player " + playerID);
     }
 
+    /** In card distribution process, getOneCard() is called on each player to get cards from shuffleGenerator;
+     */
     public void getOneCard() {
 
-
     }
+
+    /** Create CardManager to manage the cards in player's hand;
+     *  Sorting work is done by calling this function;
+     */
     public void sortCard() {	
-    	this.manager = new CardManager(cardpack,gameInfo);
+    	this.manager = new CardManager(cardpack, table_Cards, gameInfo);
 	manager.printOutCard_in_Order();
     }
-    
+
+    /** If the player takes the IronThrone for this round, 
+     *  then player_get_Table_card() will be called to collect the left eight cards on table
+     */
+    public void player_get_Table_card() {
+	this.table_Cards = new Card[2*NPlayer];
+	for(int i=0;i<2*NPlayer;i++) {
+	    table_Cards[i] = shuffleGenerator.allCards[total_Card_Number*NPlayer+i];
+	}
+    }
+    public void playCards(boolean starter) {
+
+    }
+
+    protected boolean remove(Card.Suit suit, int number) {
+	return manager.remove(suit, number);
+    }
+
+    public void printOutCard_in_Order() {
+	manager.printOutCard_in_Order();
+    }
 }
