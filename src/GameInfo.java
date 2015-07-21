@@ -1,4 +1,8 @@
 
+/**
+ * GameInfo stores all the information of the poker game.
+ */
+
 public class GameInfo {
     public static final int CARD_IN_EACH_PACKAGE = 54;
     public static final int CARD_IN_EACH_SUIT = 13;
@@ -7,23 +11,44 @@ public class GameInfo {
     public int NPlayer;
     public int NPackage;
     public int key_Number;
-    public boolean suit_Decleared;
-    public boolean suit_Double_Decleared;
-    public boolean suit_Queen_Decleared;
-    public boolean suit_King_Decleared;
+    
+    private boolean suit_Decleared;
+    private boolean suit_Double_Decleared;
+    private boolean suit_Queen_Decleared;
+    private boolean suit_King_Decleared;
+    
     public Card.Suit key_Suit;
     public int key_from_playerID;
 
     public int ironThrone;
     public int ironThrone_temp;
 
+    private Card.Suit current_Suit;
+    private int current_Counts;
+
     public GameInfo(int NPlayer, int NPackage, int key_Number,boolean debug) {
 	this.NPlayer = NPlayer;
 	this.NPackage = NPackage;
 	this.key_Number = key_Number;
+	this.key_Suit = null;
+	this.current_Suit = null;
 	this.DEBUG = debug;
 	this.ironThrone = -1;
     }
+
+    public void update_Current_Suit(Card.Suit suit) {
+	current_Suit = suit;
+    }
+    public Card.Suit get_Current_Suit() {
+	return current_Suit;
+    }
+    public void update_Current_Counts(int counts) {
+	current_Counts = counts;
+    }
+    public int get_Current_Counts() {
+	return current_Counts;
+    }
+    
     public void updateKeySuit(Card.Suit suit,int one_or_two_or_king,int player_ID) {
 	if(!suit_Decleared && one_or_two_or_king==1) {
 	    suit_Decleared = true;
@@ -83,5 +108,12 @@ public class GameInfo {
 	    System.out.println();
 	}
 	System.out.println("Iron Throne: " + ironThrone);
+    }
+
+    public Card.Suit get_Key_Suit() {
+	return key_Suit;
+    }
+    public int get_Key_Number() {
+	return key_Number;
     }
 }

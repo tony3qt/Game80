@@ -2,9 +2,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-/** Each Player has a CardManager to do tasks, such as sorting cards, removing cards; 
- *  CardManager has five ArrayList to contian the player's card in hand;
- *  Cards are sorted in CardManager constructor;
+/** 
+ * Each Player has a CardManager to do tasks, such as sorting cards, removing cards; 
+ * CardManager has five ArrayList to contian the player's card in hand;
+ * Cards are sorted in CardManager constructor.
  */
 public class CardManager {
 
@@ -24,9 +25,10 @@ public class CardManager {
 
     GameInfo gameInfo;
     
-    /** Constructor;
-     *  Input: Array containing all the card of a player;
-     *  If the player owns the table cards, then table_Cards is not empty, otherwise table_Cards is empty;
+    /** 
+     * Constructor;
+     * Input: Array containing all the card of a player;
+     * If the player owns the table cards, then table_Cards is not empty, otherwise table_Cards is empty.
      */
     public CardManager(Card[] cardpack,Card[] table_Cards, GameInfo gameInfo) {
 	spade_Cards = new int[13];
@@ -97,7 +99,8 @@ public class CardManager {
 	Collections.sort(key_List, new SingleComparator(gameInfo));
     }
 
-    /** Print Out Cards in Order;
+    /** 
+     * Print Out Cards in Order.
      */
     public void printOutCard_in_Order() {
 
@@ -120,20 +123,28 @@ public class CardManager {
 	System.out.println();
     }
 
-    /** Remove one card if the player has that card in hand;
-     *  Search from one of the five ArrayList, depending on its suit;
-     */
-    public boolean remove(Card.Suit suit, int number) {
-
+    public ArrayList<Card> get_List(Card.Suit suit) {
+	switch(suit) {
+	case SPADE: return spade_List;
+	case HEART: return heart_List;
+	case DIAMOND: return diamond_List;
+	case CLUB: return club_List;
+	default: return null;
+	}
+    }
+    public ArrayList<Card> get_key_List() { return key_List; }
+    
+    public Card contains(Card.Suit suit, int number) {
+	Card card;
 	/* Key suit */
 	if(suit == gameInfo.key_Suit || number == gameInfo.key_Number || suit == Card.Suit.L_JOKER || suit == Card.Suit.H_JOKER) {
-	    for (Card card : key_List) {
+	    for (int i=0; i<key_List.size(); i++) {
+		card = key_List.get(i);
 		if(card.getSuit() == suit && card.getNumber() == number) {
-		    key_List.remove(card);
-		    return true;
+		    return card;
 		}
 	    }
-	    return false;
+	    return null;
 	}
 	
 	/* Suits other than key suits */
@@ -141,36 +152,128 @@ public class CardManager {
 	else {
 	    switch(suit) {
 	    case SPADE:
-		for (Card card : spade_List) {
+		for (int i=0; i<spade_List.size(); i++) {
+		card = spade_List.get(i);
 		    if(card.getSuit() == suit && card.getNumber() == number) {
-			spade_List.remove(card);
+			return card;
+		    }
+		}
+		return null;
+	    
+	    case HEART:
+		for (int i=0; i<heart_List.size(); i++) {
+		card = heart_List.get(i);
+		    if(card.getSuit() == suit && card.getNumber() == number) {
+			return card;
+		    }
+		}
+		return null;
+
+	    case DIAMOND:
+		for (int i=0; i<diamond_List.size(); i++) {
+		card = diamond_List.get(i);
+		    if(card.getSuit() == suit && card.getNumber() == number) {
+			return card;
+		    }
+		}
+		return null;
+
+	    case CLUB:
+		for (int i=0; i<club_List.size(); i++) {
+		    card = club_List.get(i);
+		    if(card.getSuit() == suit && card.getNumber() == number) {
+			return card;
+		    }
+		}
+		return null;
+	    default:
+		return null;
+	    }
+	}
+    }
+    
+    /** Remove one card if the player has that card in hand;
+     *  Search from one of the five ArrayList, depending on its suit;
+     */
+    public void remove(Card.Suit suit, int number) {
+
+	Card card;
+
+	card = contains(suit, number);
+	if (card != null) {
+	    if (card.isKey()) {
+		key_List.remove(card);
+	    }
+	    else {
+		switch(card.getSuit()) {
+		case SPADE:
+		    spade_List.remove(card);
+		    break;
+		case HEART:
+		    heart_List.remove(card);
+		    break;
+		case DIAMOND:
+		    diamond_List.remove(card);
+		    break;
+		case CLUB:
+		    club_List.remove(card);
+		    break;
+		}
+	    }
+	}
+	else {
+	    System.out.println("remove failed");
+	}
+	/*
+	
+	if(suit == gameInfo.key_Suit || number == gameInfo.key_Number || suit == Card.Suit.L_JOKER || suit == Card.Suit.H_JOKER) {
+	    for (int i=0; i<key_List.size(); i++) {
+		card = key_List.get(i);
+		if(card.getSuit() == suit && card.getNumber() == number) {
+		    key_List.remove(i);
+		    return true;
+		}
+	    }
+	    return false;
+	}
+	
+	else {
+	    switch(suit) {
+	    case SPADE:
+		for (int i=0; i<spade_List.size(); i++) {
+		card = spade_List.get(i);
+		    if(card.getSuit() == suit && card.getNumber() == number) {
+			spade_List.remove(i);
 			return true;
 		    }
 		}
 		return false;
 	    
 	    case HEART:
-		for (Card card : heart_List) {
+		for (int i=0; i<heart_List.size(); i++) {
+		card = heart_List.get(i);
 		    if(card.getSuit() == suit && card.getNumber() == number) {
-			heart_List.remove(card);
+			heart_List.remove(i);
 			return true;
 		    }
 		}
 		return false;
 
 	    case DIAMOND:
-		for (Card card : diamond_List) {
+		for (int i=0; i<diamond_List.size(); i++) {
+		card = diamond_List.get(i);
 		    if(card.getSuit() == suit && card.getNumber() == number) {
-			diamond_List.remove(card);
+			diamond_List.remove(i);
 			return true;
 		    }
 		}
 		return false;
 
 	    case CLUB:
-		for (Card card : club_List) {
+		for (int i=0; i<club_List.size(); i++) {
+		    card = club_List.get(i);
 		    if(card.getSuit() == suit && card.getNumber() == number) {
-			club_List.remove(card);
+			club_List.remove(i);
 			return true;
 		    }
 		}
@@ -179,6 +282,8 @@ public class CardManager {
 		return false;
 	    }
 	}
+
+	*/
     }
 	
 }

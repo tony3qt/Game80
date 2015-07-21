@@ -1,4 +1,12 @@
 import java.util.Scanner;
+import java.util.ArrayList;
+/** 
+ * HumanPlayer inherits from Player;
+ * Card operations require input from command line; 
+ * Method:
+ * getOneCard()
+ * playCards()
+ */
 
 public class HumanPlayer extends Player {
 
@@ -6,6 +14,11 @@ public class HumanPlayer extends Player {
 	super(gameInfo, playerID, shuffleGenerator);
     }
 
+
+    /** 
+     * Operation getOneCard() read commands from user input;
+     * And make corresponding operations based on user command.
+     */
     @Override
     public void getOneCard() {
 
@@ -47,7 +60,7 @@ public class HumanPlayer extends Player {
 		gameInfo.updateKeySuit( Card.Suit.H_JOKER, 4, playerID);
 	    }
 	    else {
-		System.out.println("Invalid input");
+		System.out.println("Invalid Input. Type In Correct Command");
 	    }
 	    command = scan.nextLine();
 	}
@@ -73,15 +86,105 @@ public class HumanPlayer extends Player {
     }
 
 
+    /**
+     * Read from user's input;
+     */
     @Override
-    public void playCards(boolean starter) {
+    public boolean playCards(boolean starter) {
+	
+	ArrayList<Card.Suit> play_suit_List = new ArrayList<Card.Suit>();
+	ArrayList<Integer> play_number_List = new ArrayList<Integer>();
+	GameRules gameRules = new GameRules(gameInfo);
+	
 	Scanner scan= new Scanner(System.in);
 	scan.useDelimiter("\\n");
-	System.out.print("Player ID = " + playerID + " : ");
+	System.out.println("Player ID = " + playerID + " : ");
+	
 	String command = scan.nextLine();
-	for(int i=0; i<command.length(); i=i+2) {
-	    
+	char char_suit;
+	int number;
+	if (command.equals("")) {return false;}
+	
+	while (!command.equals("")) {
+	    char_suit = command.charAt(0);
+	    number = Integer.parseInt(command.substring(1));
+	    switch(char_suit) {
+	    case 's':
+		if(number<=14 && number>=2) {
+		    play_suit_List.add(Card.Suit.SPADE);
+		    play_number_List.add(number);
+		}
+		else return false;
+		break;
+	     case 'h':
+		if(number<=14 && number>=2) {
+		    play_suit_List.add(Card.Suit.HEART);
+		    play_number_List.add(number);
+		}
+		else return false;
+		break;
+	    case 'd':
+		if(number<=14 && number>=2) {
+		    play_suit_List.add(Card.Suit.DIAMOND);
+		    play_number_List.add(number);
+		}
+		else return false;
+		break;
+	    case 'c':
+		if(number<=14 && number>=2) {
+		    play_suit_List.add(Card.Suit.CLUB);
+		    play_number_List.add(number);
+		}
+		else return false;
+		break;
+	    case 'q':
+		if(number == 0) {
+		    play_suit_List.add(Card.Suit.L_JOKER);
+		    play_number_List.add(number);
+		}
+		else return false;
+		break;
+	    case 'k':
+		if(number == 0) {
+		    play_suit_List.add(Card.Suit.H_JOKER);
+		    play_number_List.add(number);
+		}
+		else return false;
+		break;
+	    default: return false;
+	    }
+	    command = scan.nextLine();
+	}
+	
+	if(starter) {
+	    if (gameRules.test(this, play_suit_List, play_number_List)) {
+		for (int i=0; i<play_suit_List.size(); i++) {
+		    remove(play_suit_List.get(i),play_number_List.get(i));
+		}
+	       	  
+		gameInfo.update_Current_Counts(play_suit_List.size());
+		if(play_suit_List.get(0) == gameInfo.get_Key_Suit() || play_number_List.get(0) == gameInfo.get_Key_Number()
+		   || play_suit_List.get(0) == Card.Suit.L_JOKER || play_suit_List.get(0) == Card.Suit.H_JOKER) {
+		    gameInfo.update_Current_Suit(gameInfo.get_Key_Suit());
+		}
+		else {
+		    gameInfo.update_Current_Suit(play_suit_List.get(0));
+		}
+		return true;
+	    }
+	    else { return false; }
+	}
+	else {
+	    if (gameRules.test(gameInfo.get_Current_Suit(), gameInfo.get_Current_Counts(), this, play_suit_List, play_number_List)) {
+		for (int i=0; i<play_suit_List.size(); i++) {
+		    remove(play_suit_List.get(i),play_number_List.get(i));
+		    System.out.println("removing...");
+		}
+		return true;
+	    }
+	    else { return false; }
 	}
     }
     
+	
 }

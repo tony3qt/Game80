@@ -1,4 +1,9 @@
-
+import java.util.ArrayList;
+/**
+ * GameRules class has a whole serial of methods which test whether the cards are valid or not;
+ * Those methods are called before Player.playCards();
+ * In order to make sure the cards a player choose to play obey the game's rules.
+ */
 public class GameRules {
 
     GameInfo gameInfo;
@@ -7,12 +12,88 @@ public class GameRules {
 	this.gameInfo = gameInfo;
     }
 
-    public boolean test(Player player, Card... cards) {
+    /**
+     * Suit is not specified yet;
+     * But all the cards must have uniform suit;
+     * The player must have those cards in hand.
+     */
+    public boolean test(Player player, ArrayList<Card.Suit> play_suit_List, ArrayList<Integer> play_number_List) {
 
-	return true;
+	assert play_suit_List.size() == play_number_List.size();
+	Card card;
+	ArrayList<Card> play_list = new ArrayList<Card>();
+	for (int i=0; i<play_suit_List.size(); i++) {
+	    card = player.contains(play_suit_List.get(i), play_number_List.get(i));
+	    if (card == null ) {
+		System.out.println("Doesn't not contain cards");
+		return false;
+	    }
+	    else {
+		play_list.add(card);
+	    }
+	}
+	CardStructure cs = new CardStructure(gameInfo, play_list);
+	if(cs.get_Uniform_Suit() != null) {
+	    return true;
+	}
+	else {
+	    System.out.println("Cards suit not uniform");
+	    return false;
+	}
     }
-    
-    public boolean test(Card.Suit suit, Player player, Card... cards) {
-	return true;
+
+    /**
+     * Suit is specified, number of cards is also specified;
+     * Cards of other suit can only be played out if there's not enough cards in the specified suit;
+     * The player must have those cards in hand.
+     */
+    public boolean test(Card.Suit suit, int total_Number, Player player, ArrayList<Card.Suit> play_suit_List, ArrayList<Integer> play_number_List) {
+	
+	assert play_suit_List.size() == play_number_List.size();
+	int max_num_other_suit = 0;
+	int num_other_suit = 0;
+	Card card;
+
+	if (play_suit_List.size() != total_Number) {
+	    System.out.println("Incorrect card number");
+	    return false;
+	}
+	
+	for (int i=0; i<play_suit_List.size(); i++) {
+	    card = player.contains(play_suit_List.get(i), play_number_List.get(i));
+	    if (card == null ) {
+		System.out.println("Doesn't not contain cards");
+		return false;
+	    }
+	}
+	
+	if ( suit == gameInfo.get_Key_Suit()) {
+	    max_num_other_suit = - (player.get_Manager().get_key_List().size() - total_Number);
+	    if (max_num_other_suit < 0) max_num_other_suit = 0;
+	    for (int i=0; i<play_suit_List.size(); i++) {
+		if (play_suit_List.get(i) != Card.Suit.L_JOKER && play_suit_List.get(i) != Card.Suit.H_JOKER
+		    && play_suit_List.get(i) != gameInfo.get_Key_Suit() && play_number_List.get(i) != gameInfo.get_Key_Number()) {
+		    num_other_suit ++ ;
+		}
+		if (num_other_suit > max_num_other_suit) {
+		    return false;
+		}
+	    }
+	    return true;
+	}
+	else {
+	     max_num_other_suit = - (player.get_Manager().get_List(suit).size() - total_Number);
+	    if (max_num_other_suit < 0) max_num_other_suit = 0;
+	    for (int i=0; i<play_suit_List.size(); i++) {
+		if (play_suit_List.get(i) != suit) {
+		    num_other_suit ++ ;
+		}
+		if (num_other_suit > max_num_other_suit) {
+		    System.out.println("Cards suit illegal");
+		    return false;
+		}
+	    }
+	    return true;
+	}
     }
 }

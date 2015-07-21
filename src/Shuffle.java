@@ -7,10 +7,11 @@ public class Shuffle {
     
     Card[] allCards;
 
-    /** Constructor;
-     *  Generate all the cards in order;
-     *  Shuffle them to a random order;
-     *  In debug mode, the shuffled cards will be printed out.
+    /** 
+     * Constructor;
+     * Generate all the cards in order;
+     * Shuffle them to a random order;
+     * In debug mode, the shuffled cards will be printed out.
      */
     public Shuffle(GameInfo gameInfo) {
 	this.Npackage = gameInfo.NPackage;

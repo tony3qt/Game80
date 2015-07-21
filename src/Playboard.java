@@ -62,6 +62,19 @@ public class Playboard {
 	}
 
 
+	
+	/*
+	for(int p=0;p<NPlayer;p++) {
+	    players[p].remove(Card.Suit.SPADE, 14);
+	    players[p].printOutCard_in_Order();
+	}
+	*/
+
+	while(!players[0].playCards(true));
+	players[0].printOutCard_in_Order();
+	
+	while(!players[1].playCards(false));
+	players[1].printOutCard_in_Order();
 	/*
 
 	Card card1 = new Card(Card.Suit.SPADE,11);

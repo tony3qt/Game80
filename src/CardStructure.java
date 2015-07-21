@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * CardStructure extract the structure of an ArrayList of cards;
+ * And express the structure in structureList, which is an ArrayList of StructureNode.
+ */
+
 public class CardStructure {
 
     Card.Suit uniform_Suit;
@@ -11,7 +16,7 @@ public class CardStructure {
     
     ArrayList<StructureNode> structureList;
     
-    public CardStructure(GameInfo gameInfo, Card... args) {
+    public CardStructure(GameInfo gameInfo, ArrayList<Card> args) {
 	this.gameInfo = gameInfo;
 	uniform_Suit = null;
 	card_Table = new int[0];
@@ -74,9 +79,9 @@ public class CardStructure {
 	     
     }
 
-    public boolean testSuit(Card... args) {
+    public boolean testSuit(ArrayList<Card> args) {
 
-	if(args[0].isKey()) {
+	if(args.get(0).isKey()) {
 	    uniform_Suit = gameInfo.key_Suit;
 	    for (Card card : args) {
 		if (!card.isKey()) {
@@ -88,7 +93,7 @@ public class CardStructure {
 	}
 
 	else {
-	    uniform_Suit = args[0].getSuit();
+	    uniform_Suit = args.get(0).getSuit();
 	    for (Card card : args) {
 		if (uniform_Suit != card.getSuit() || card.isKey()) {
 		    //System.out.println("Error: Suit is not uniform!");
@@ -131,6 +136,10 @@ public class CardStructure {
 	}
 	Collections.sort(structureList);
 
+    }
+
+    public Card.Suit get_Uniform_Suit() {
+	return uniform_Suit;
     }
 
     
