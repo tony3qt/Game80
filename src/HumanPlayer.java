@@ -73,7 +73,7 @@ public class HumanPlayer extends Player {
 	System.out.println();
 	
 	/* Record the key Card */
-	if (cardpack[current_Card_Number].getNumber() == gameInfo.key_Number) {
+	if (cardpack[current_Card_Number].getNumber() == gameInfo.get_Key_Number()) {
 	    keyNumber_Counts[cardpack[current_Card_Number].getSuit().getValue()] ++;
 	}
 	else if (cardpack[current_Card_Number].getSuit() == Card.Suit.L_JOKER) {
@@ -88,13 +88,14 @@ public class HumanPlayer extends Player {
 
     /**
      * Read from user's input;
+     * Check the validity of the cards;
+     * Remve and return true if cards are valid, return false otherwise.
      */
     @Override
     public boolean playCards(boolean starter) {
 	
 	ArrayList<Card.Suit> play_suit_List = new ArrayList<Card.Suit>();
 	ArrayList<Integer> play_number_List = new ArrayList<Integer>();
-	GameRules gameRules = new GameRules(gameInfo);
 	
 	Scanner scan= new Scanner(System.in);
 	scan.useDelimiter("\\n");
@@ -157,7 +158,7 @@ public class HumanPlayer extends Player {
 	}
 	
 	if(starter) {
-	    if (gameRules.test(this, play_suit_List, play_number_List)) {
+	    if (GameRules.test(this, play_suit_List, play_number_List, gameInfo)) {
 		for (int i=0; i<play_suit_List.size(); i++) {
 		    remove(play_suit_List.get(i),play_number_List.get(i));
 		}
@@ -175,12 +176,20 @@ public class HumanPlayer extends Player {
 	    else { return false; }
 	}
 	else {
-	    if (gameRules.test(gameInfo.get_Current_Suit(), gameInfo.get_Current_Counts(), this, play_suit_List, play_number_List)) {
+	    if (GameRules.test(gameInfo.get_Current_Suit(), gameInfo.get_Current_Counts(), this, play_suit_List, play_number_List, gameInfo)) {
+		ArrayList<Card> play_List = new ArrayList<Card>();
 		for (int i=0; i<play_suit_List.size(); i++) {
-		    remove(play_suit_List.get(i),play_number_List.get(i));
-		    System.out.println("removing...");
+		    play_List.add(contains(play_suit_List.get(i),play_number_List.get(i)));
 		}
-		return true;
+		if (GameRules.check_Optimal_Rule(gameInfo.get_Current_Structure(), play_List, this, gameInfo)) {
+		    for (int i=0; i<play_suit_List.size(); i++) {
+			remove(play_suit_List.get(i),play_number_List.get(i));
+		    }
+		    return true;
+		}
+		else {
+		    return false;
+		}
 	    }
 	    else { return false; }
 	}

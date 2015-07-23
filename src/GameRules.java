@@ -1,23 +1,23 @@
 import java.util.ArrayList;
 /**
- * GameRules class has a whole serial of methods which test whether the cards are valid or not;
- * Those methods are called before Player.playCards();
+ * GameRules class has a whole serial of static methods which test whether the cards are valid or not;
+ * Those methods are called in Player.playCards();
  * In order to make sure the cards a player choose to play obey the game's rules.
  */
 public class GameRules {
 
-    GameInfo gameInfo;
-    
-    public GameRules(GameInfo gameInfo) {
-	this.gameInfo = gameInfo;
-    }
+    /**
+     * Private constructor prevent instantiation;
+     * GameRules provide 
+     */
+    private GameRules() { }
 
     /**
      * Suit is not specified yet;
      * But all the cards must have uniform suit;
      * The player must have those cards in hand.
      */
-    public boolean test(Player player, ArrayList<Card.Suit> play_suit_List, ArrayList<Integer> play_number_List) {
+    public static boolean test(Player player, ArrayList<Card.Suit> play_suit_List, ArrayList<Integer> play_number_List, GameInfo gameInfo) {
 
 	assert play_suit_List.size() == play_number_List.size();
 	Card card;
@@ -34,6 +34,7 @@ public class GameRules {
 	}
 	CardStructure cs = new CardStructure(gameInfo, play_list);
 	if(cs.get_Uniform_Suit() != null) {
+	    gameInfo.update_Current_Structure(cs);
 	    return true;
 	}
 	else {
@@ -47,7 +48,7 @@ public class GameRules {
      * Cards of other suit can only be played out if there's not enough cards in the specified suit;
      * The player must have those cards in hand.
      */
-    public boolean test(Card.Suit suit, int total_Number, Player player, ArrayList<Card.Suit> play_suit_List, ArrayList<Integer> play_number_List) {
+    public static boolean test(Card.Suit suit, int total_Number, Player player, ArrayList<Card.Suit> play_suit_List, ArrayList<Integer> play_number_List, GameInfo gameInfo) {
 	
 	assert play_suit_List.size() == play_number_List.size();
 	int max_num_other_suit = 0;
@@ -76,6 +77,7 @@ public class GameRules {
 		    num_other_suit ++ ;
 		}
 		if (num_other_suit > max_num_other_suit) {
+		    System.out.println("Cards suit illegal");
 		    return false;
 		}
 	    }
@@ -95,5 +97,27 @@ public class GameRules {
 	    }
 	    return true;
 	}
+    }
+    public static boolean check_Optimal_Rule(CardStructure cs, ArrayList<Card> card_List, Player player, GameInfo gameInfo) {
+	ArrayList<Boolean> total_in_hand;
+	ArrayList<Boolean> to_play;
+	assert cs.get_Uniform_Suit() != null;
+
+	to_play = StructureComparator.structure_Analyze(cs, card_List, gameInfo);
+	    
+	if(cs.get_Uniform_Suit()==gameInfo.get_Key_Suit())
+	    total_in_hand = StructureComparator.structure_Analyze(cs, player.get_Manager().get_key_List(), gameInfo);
+	else
+	    total_in_hand = StructureComparator.structure_Analyze(cs, player.get_Manager().get_List(cs.get_Uniform_Suit()), gameInfo);
+
+	assert to_play.size() == total_in_hand.size();
+	for(int i=0; i<to_play.size(); i++) {
+	    if (to_play.get(i) != total_in_hand.get(i)) {
+		System.out.println("Doesn't obey optimal rule");
+		return false;
+	    }
+	}
+	return true;
+	
     }
 }

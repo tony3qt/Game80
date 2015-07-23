@@ -25,6 +25,7 @@ public class GameInfo {
 
     private Card.Suit current_Suit;
     private int current_Counts;
+    private CardStructure current_Structure;
 
     public GameInfo(int NPlayer, int NPackage, int key_Number,boolean debug) {
 	this.NPlayer = NPlayer;
@@ -47,6 +48,13 @@ public class GameInfo {
     }
     public int get_Current_Counts() {
 	return current_Counts;
+    }
+
+    public void update_Current_Structure(CardStructure cs) {
+	current_Structure = cs;
+    }
+    public CardStructure get_Current_Structure() {
+	return current_Structure;
     }
     
     public void updateKeySuit(Card.Suit suit,int one_or_two_or_king,int player_ID) {

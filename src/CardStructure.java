@@ -3,7 +3,7 @@ import java.util.Collections;
 
 /**
  * CardStructure extract the structure of an ArrayList of cards;
- * And express the structure in structureList, which is an ArrayList of StructureNode.
+ * And express the structure in structure_List, which is an ArrayList of StructureNode.
  */
 
 public class CardStructure {
@@ -14,8 +14,13 @@ public class CardStructure {
     GameInfo gameInfo;
     int card_Number;
     
-    ArrayList<StructureNode> structureList;
-    
+    ArrayList<StructureNode> structure_List;
+
+    /**
+     * Construct a table(card_Table) of size equals the size of cards'suit, each element is 0, 1 or 2;
+     * renomalize() groups cards if a double of a truck exists;
+     * generateStructure() constructe the structure_List;
+     */
     public CardStructure(GameInfo gameInfo, ArrayList<Card> args) {
 	this.gameInfo = gameInfo;
 	uniform_Suit = null;
@@ -71,7 +76,7 @@ public class CardStructure {
 	else {
 	    uniform_Suit = null;
 	    card_Table_Renormalized = new int[0];
-	    structureList = new ArrayList<StructureNode>();
+	    structure_List = new ArrayList<StructureNode>();
 	    for (Card card : args) {
 		card_Number ++ ;
 	    }
@@ -79,6 +84,9 @@ public class CardStructure {
 	     
     }
 
+    /**
+     * Test whether the cards have the same suit;
+     */
     public boolean testSuit(ArrayList<Card> args) {
 
 	if(args.get(0).isKey()) {
@@ -106,8 +114,8 @@ public class CardStructure {
 
     public void printTable() {
 	System.out.print(uniform_Suit);
-	for (int i=0;i<structureList.size();i++) {
-	    structureList.get(i).print_StructureNode();
+	for (int i=0;i<structure_List.size();i++) {
+	    structure_List.get(i).print_StructureNode();
 	}
 	for (int i=0;i<card_Table_Renormalized.length;i++) {
 	    System.out.print(card_Table_Renormalized[i] + " ");
@@ -128,20 +136,19 @@ public class CardStructure {
 	
     }
     public void generateStructure() {
-	structureList = new ArrayList<StructureNode> ();
+	structure_List = new ArrayList<StructureNode> ();
 	for (int i=0;i<card_Table_Renormalized.length;i++) {
 	    if(card_Table_Renormalized[i]!=0) {
-		structureList.add(new StructureNode(card_Table_Renormalized[i],i));
+		structure_List.add(new StructureNode(card_Table_Renormalized[i],i));
 	    }
 	}
-	Collections.sort(structureList);
+	Collections.sort(structure_List);
 
     }
 
-    public Card.Suit get_Uniform_Suit() {
-	return uniform_Suit;
-    }
+    public Card.Suit get_Uniform_Suit() { return uniform_Suit; }
 
-    
-    
+    public ArrayList<StructureNode> get_Structure_List() { return structure_List; }
+
+    public int get_Card_Number() { return card_Number; }
 }

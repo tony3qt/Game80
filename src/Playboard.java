@@ -75,6 +75,12 @@ public class Playboard {
 	
 	while(!players[1].playCards(false));
 	players[1].printOutCard_in_Order();
+
+	while(!players[2].playCards(false));
+	players[2].printOutCard_in_Order();
+
+	while(!players[3].playCards(false));
+	players[3].printOutCard_in_Order();
 	/*
 
 	Card card1 = new Card(Card.Suit.SPADE,11);
