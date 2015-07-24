@@ -48,7 +48,7 @@ public class GameRules {
      * Cards of other suit can only be played out if there's not enough cards in the specified suit;
      * The player must have those cards in hand.
      */
-    public static boolean test(Card.Suit suit, int total_Number, Player player, ArrayList<Card.Suit> play_suit_List, ArrayList<Integer> play_number_List, GameInfo gameInfo) {
+    public static int test(Card.Suit suit, int total_Number, Player player, ArrayList<Card.Suit> play_suit_List, ArrayList<Integer> play_number_List, GameInfo gameInfo) {
 	
 	assert play_suit_List.size() == play_number_List.size();
 	int max_num_other_suit = 0;
@@ -57,14 +57,14 @@ public class GameRules {
 
 	if (play_suit_List.size() != total_Number) {
 	    System.out.println("Incorrect card number");
-	    return false;
+	    return -1;
 	}
 	
 	for (int i=0; i<play_suit_List.size(); i++) {
 	    card = player.contains(play_suit_List.get(i), play_number_List.get(i));
 	    if (card == null ) {
 		System.out.println("Doesn't not contain cards");
-		return false;
+		return -1;
 	    }
 	}
 	
@@ -78,10 +78,10 @@ public class GameRules {
 		}
 		if (num_other_suit > max_num_other_suit) {
 		    System.out.println("Cards suit illegal");
-		    return false;
+		    return -1;
 		}
 	    }
-	    return true;
+	    return max_num_other_suit;
 	}
 	else {
 	     max_num_other_suit = - (player.get_Manager().get_List(suit).size() - total_Number);
@@ -92,10 +92,10 @@ public class GameRules {
 		}
 		if (num_other_suit > max_num_other_suit) {
 		    System.out.println("Cards suit illegal");
-		    return false;
+		    return -1;
 		}
 	    }
-	    return true;
+	    return max_num_other_suit;
 	}
     }
     public static boolean check_Optimal_Rule(CardStructure cs, ArrayList<Card> card_List, Player player, GameInfo gameInfo) {

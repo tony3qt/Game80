@@ -83,9 +83,9 @@ public class StructureComparator {
 		structure_Boolean_List.add(true);
 		start2 = cs_test.get_Structure_List().get(j).start;
 		cs_test.get_Structure_List().get(j).type = type1;
-		cs_test.get_Structure_List().get(j).start = start2 + (type1-type2)/2;
+		cs_test.get_Structure_List().get(j).start = start2 + (type2-type1)/2;
 		cs_test.get_Structure_List().remove(j);
-		cs_test.get_Structure_List().add(new StructureNode(type1-type2,start2));
+		cs_test.get_Structure_List().add(new StructureNode(type2-type1,start2));
 		Collections.sort(cs.get_Structure_List());
 	    }
 	}
