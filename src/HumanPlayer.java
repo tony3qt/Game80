@@ -156,9 +156,12 @@ public class HumanPlayer extends Player {
 	    }
 	    command = scan.nextLine();
 	}
+
+	manager.deactivate_All();
 	
 	if(starter) {
 	    if (GameRules.test(this, play_suit_List, play_number_List, gameInfo)) {
+		manager.deactivate_All();
 		for (int i=0; i<play_suit_List.size(); i++) {
 		    remove(play_suit_List.get(i),play_number_List.get(i));
 		}
@@ -178,10 +181,12 @@ public class HumanPlayer extends Player {
 	else {
 	    if (GameRules.test(gameInfo.get_Current_Suit(), gameInfo.get_Current_Counts(), this, play_suit_List, play_number_List, gameInfo) == 0) {
 		ArrayList<Card> play_List = new ArrayList<Card>();
+		manager.deactivate_All();
 		for (int i=0; i<play_suit_List.size(); i++) {
 		    play_List.add(contains(play_suit_List.get(i),play_number_List.get(i)));
 		}
 		if (GameRules.check_Optimal_Rule(gameInfo.get_Current_Structure(), play_List, this, gameInfo)) {
+		    manager.deactivate_All();
 		    for (int i=0; i<play_suit_List.size(); i++) {
 			remove(play_suit_List.get(i),play_number_List.get(i));
 		    }

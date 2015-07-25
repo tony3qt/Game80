@@ -140,7 +140,7 @@ public class CardManager {
 	if(suit == gameInfo.key_Suit || number == gameInfo.key_Number || suit == Card.Suit.L_JOKER || suit == Card.Suit.H_JOKER) {
 	    for (int i=0; i<key_List.size(); i++) {
 		card = key_List.get(i);
-		if(card.getSuit() == suit && card.getNumber() == number) {
+		if(card.getSuit() == suit && card.getNumber() == number  && !card.isActive()) {
 		    return card;
 		}
 	    }
@@ -154,7 +154,7 @@ public class CardManager {
 	    case SPADE:
 		for (int i=0; i<spade_List.size(); i++) {
 		card = spade_List.get(i);
-		    if(card.getSuit() == suit && card.getNumber() == number) {
+		if(card.getSuit() == suit && card.getNumber() == number && !card.isActive()) {
 			return card;
 		    }
 		}
@@ -163,7 +163,7 @@ public class CardManager {
 	    case HEART:
 		for (int i=0; i<heart_List.size(); i++) {
 		card = heart_List.get(i);
-		    if(card.getSuit() == suit && card.getNumber() == number) {
+		if(card.getSuit() == suit && card.getNumber() == number && !card.isActive()) {
 			return card;
 		    }
 		}
@@ -172,7 +172,7 @@ public class CardManager {
 	    case DIAMOND:
 		for (int i=0; i<diamond_List.size(); i++) {
 		card = diamond_List.get(i);
-		    if(card.getSuit() == suit && card.getNumber() == number) {
+		if(card.getSuit() == suit && card.getNumber() == number && !card.isActive()) {
 			return card;
 		    }
 		}
@@ -181,7 +181,7 @@ public class CardManager {
 	    case CLUB:
 		for (int i=0; i<club_List.size(); i++) {
 		    card = club_List.get(i);
-		    if(card.getSuit() == suit && card.getNumber() == number) {
+		    if(card.getSuit() == suit && card.getNumber() == number && !card.isActive()) {
 			return card;
 		    }
 		}
@@ -198,7 +198,7 @@ public class CardManager {
     public void remove(Card.Suit suit, int number) {
 
 	Card card;
-
+	
 	card = contains(suit, number);
 	if (card != null) {
 	    if (card.isKey()) {
@@ -224,66 +224,28 @@ public class CardManager {
 	else {
 	    System.out.println("remove failed");
 	}
-	/*
-	
-	if(suit == gameInfo.key_Suit || number == gameInfo.key_Number || suit == Card.Suit.L_JOKER || suit == Card.Suit.H_JOKER) {
-	    for (int i=0; i<key_List.size(); i++) {
-		card = key_List.get(i);
-		if(card.getSuit() == suit && card.getNumber() == number) {
-		    key_List.remove(i);
-		    return true;
-		}
-	    }
-	    return false;
-	}
-	
-	else {
-	    switch(suit) {
-	    case SPADE:
-		for (int i=0; i<spade_List.size(); i++) {
-		card = spade_List.get(i);
-		    if(card.getSuit() == suit && card.getNumber() == number) {
-			spade_List.remove(i);
-			return true;
-		    }
-		}
-		return false;
-	    
-	    case HEART:
-		for (int i=0; i<heart_List.size(); i++) {
-		card = heart_List.get(i);
-		    if(card.getSuit() == suit && card.getNumber() == number) {
-			heart_List.remove(i);
-			return true;
-		    }
-		}
-		return false;
+    }
 
-	    case DIAMOND:
-		for (int i=0; i<diamond_List.size(); i++) {
-		card = diamond_List.get(i);
-		    if(card.getSuit() == suit && card.getNumber() == number) {
-			diamond_List.remove(i);
-			return true;
-		    }
-		}
-		return false;
-
-	    case CLUB:
-		for (int i=0; i<club_List.size(); i++) {
-		    card = club_List.get(i);
-		    if(card.getSuit() == suit && card.getNumber() == number) {
-			club_List.remove(i);
-			return true;
-		    }
-		}
-		return false;
-	    default:
-		return false;
-	    }
+    public void deactivate_All() {
+	for(Card card : key_List) {
+	    card.deactivate();
 	}
 
-	*/
+	for(Card card : spade_List) {
+	    card.deactivate();
+	}
+
+	for(Card card : heart_List) {
+	    card.deactivate();
+	}
+
+	for(Card card : club_List) {
+	    card.deactivate();
+	}
+
+	for(Card card : diamond_List) {
+	    card.deactivate();
+	}
     }
 	
 }

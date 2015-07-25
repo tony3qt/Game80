@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 public class Playboard {
 
@@ -55,6 +56,7 @@ public class Playboard {
 	
 	distribute_Cards();
 	get_Table_card();
+
 	
 	gameInfo.printOutGameInfo();
 	for(int p=0;p<NPlayer;p++) {
@@ -81,19 +83,19 @@ public class Playboard {
 
 	while(!players[3].playCards(false));
 	players[3].printOutCard_in_Order();
-	/*
+	
 
-	Card card1 = new Card(Card.Suit.SPADE,11);
-	Card card2 = new Card(Card.Suit.SPADE,11);
-	Card card3 = new Card(Card.Suit.SPADE,14);
-	Card card4 = new Card(Card.Suit.SPADE,14);
+	Card card1 = new Card(Card.Suit.SPADE,2);
+	Card card2 = new Card(Card.Suit.SPADE,2);
+	Card card3 = new Card(Card.Suit.CLUB,2);
+	Card card4 = new Card(Card.Suit.CLUB,2);
 	Card card5 = new Card(Card.Suit.SPADE,12);
 	Card card11 = new Card(Card.Suit.SPADE,3);
 	
-	Card card6 = new Card(Card.Suit.HEART,3);
-	Card card7 = new Card(Card.Suit.HEART,3);
-	Card card8 = new Card(Card.Suit.HEART,4);
-	Card card9 = new Card(Card.Suit.HEART,4);
+	Card card6 = new Card(Card.Suit.HEART,2);
+	Card card7 = new Card(Card.Suit.HEART,2);
+	Card card8 = new Card(Card.Suit.L_JOKER,0);
+	Card card9 = new Card(Card.Suit.L_JOKER,0);
 	Card card10 = new Card(Card.Suit.HEART,5);
 	Card card12 = new Card(Card.Suit.HEART,5);
 	
@@ -109,22 +111,35 @@ public class Playboard {
 	card10.setKey(gameInfo);
 	card11.setKey(gameInfo);
 	card12.setKey(gameInfo);
-	
-	CardStructure cs1 = new CardStructure(gameInfo,card1,card2,card3,card4,card5,card11);
-	CardStructure cs2 = new CardStructure(gameInfo,card6,card7,card8,card9,card10,card12);
-	StructureComparator sc = new StructureComparator(gameInfo);
 
+	ArrayList<Card> a1 = new ArrayList<Card>();
+	ArrayList<Card> a2 = new ArrayList<Card>();
+	a1.add(card1);
+	a1.add(card2);
+	//a1.add(card3);
+	//a1.add(card4);
+	//a2.add(card6);
+	//a2.add(card7);
+	a2.add(card8);
+	a2.add(card9);
+	
+	CardStructure cs1 = new CardStructure(gameInfo,a1);
+	CardStructure cs2 = new CardStructure(gameInfo,a2);
+	cs2.printTable();
 	cs1.printTable();
 	
-	if (sc.compare(cs1,cs2) > 0) {
-	    System.out.println(">");
-	}
-	else {
+	if (StructureComparator.compare(cs1,cs2,gameInfo) > 0) {
 	    System.out.println("<");
 	}
+	else if (StructureComparator.compare(cs1,cs2,gameInfo) < 0) {
+	    System.out.println(">");
+	}
+	else
+	    System.out.println("=");
+	
 	
 	cs2.printTable();
 	
-	*/
+	
     }
 }

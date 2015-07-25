@@ -28,7 +28,9 @@ public class GameRules {
 		System.out.println("Doesn't not contain cards");
 		return false;
 	    }
+	    
 	    else {
+		card.activate();
 		play_list.add(card);
 	    }
 	}

@@ -36,7 +36,7 @@ public class CardStructure {
 			else if (card.getNumber() > gameInfo.key_Number && card.getSuit() != Card.Suit.H_JOKER && card.getSuit() != Card.Suit.L_JOKER)
 			    card_Table[card.getNumber()-3] ++;
 			else if (card.getNumber() == gameInfo.key_Number && card.getSuit() != gameInfo.key_Suit) 
-			    card_Table[(card.getSuit().getValue() - gameInfo.key_Suit.getValue()+4)%4-1 + gameInfo.CARD_IN_EACH_SUIT-2] ++ ;
+			    card_Table[(card.getSuit().getValue() - gameInfo.key_Suit.getValue()+4)%4 + gameInfo.CARD_IN_EACH_SUIT-2] ++ ;
 
 			else if (card.getNumber() == gameInfo.key_Number && card.getSuit() == gameInfo.key_Suit)
 			    card_Table[gameInfo.CARD_IN_EACH_SUIT+2] ++ ;
@@ -69,7 +69,7 @@ public class CardStructure {
 			card_Table[card.getNumber()-3] ++;
 		}
 	    }
-	    renomalize();
+	    renormalize();
 	    generateStructure();
 	}
     
@@ -121,26 +121,65 @@ public class CardStructure {
 	    System.out.print(card_Table_Renormalized[i] + " ");
 	}
     }
-    public void renomalize() {
+    public void renormalize() {
 	card_Table_Renormalized = new int[card_Table.length];
+	// Copy card_Table to card_Table_Renormalized;
+	for(int i=0; i<card_Table.length; i++) {
+	    card_Table_Renormalized[i] = card_Table[i];
+	}
+	// Renormalizing process;
 	int temp = 0;
-	for(int i=0;i<card_Table.length;i++) {
-	    if(card_Table[i] == 2) {
-		card_Table_Renormalized[temp] += 2;
+	for(int i=0; i<card_Table.length; i++) {
+	    if (i<=11 || i>=15) {
+		if(card_Table[i] == 2) {
+		    if (temp != i) {
+			card_Table_Renormalized[temp] += 2;
+			card_Table_Renormalized[i] = 0;
+		    }
+		}
+		else {
+		    temp = i+1;
+		}
 	    }
 	    else {
-		card_Table_Renormalized[i] = card_Table[i];
-		temp = i+1;
+		// i == 12, 13, 14;
+		if (i==12 || i==13) {
+		    if (card_Table[i] == 2) {
+			if (temp != i) {
+			    card_Table_Renormalized[temp] += 2;
+			    card_Table_Renormalized[i] = 0;
+			}
+			i = 14;
+		    }
+		    else {
+			if (temp != i) {}
+			else { temp = temp+1; }
+		        
+		    }
+		}
+		else if (i==14) {
+		    if (card_Table[i] == 2) {
+			if (temp != i) {
+			    card_Table_Renormalized[temp] += 2;
+			    card_Table_Renormalized[i] = 0;
+			}
+		    }
+		    else {
+			temp = 15;
+		    }
+		}
 	    }
+	    
 	}
 	
     }
     public void generateStructure() {
 	structure_List = new ArrayList<StructureNode> ();
 	for (int i=0;i<card_Table_Renormalized.length;i++) {
-	    if(card_Table_Renormalized[i]!=0) {
-		structure_List.add(new StructureNode(card_Table_Renormalized[i],i));
-	    }
+	    if(card_Table_Renormalized[i]!=0)
+		{
+		    structure_List.add(new StructureNode(card_Table_Renormalized[i],i));
+		}
 	}
 	Collections.sort(structure_List);
 

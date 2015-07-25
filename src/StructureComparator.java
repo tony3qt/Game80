@@ -22,7 +22,7 @@ public class StructureComparator {
 	    return 1;
 	}
 	if (cast(cs2, cs_template)) {
-	    return cs1.get_Structure_List().get(0).compareTo(cs_template.get_Structure_List().get(0));
+	    return cs1.get_Structure_List().get(0).compareTo(cs2.get_Structure_List().get(0));
 	}
 	else {
 	    return 1;

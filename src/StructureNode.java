@@ -15,7 +15,12 @@ public class StructureNode implements Comparable<StructureNode> {
 	    return otherNode.type - this.type;
 	}
 	else {
-	    return otherNode.start - this.start;
+	    if((otherNode.start > 11) && (otherNode.start < 15) && (this.start >11) && (this.start < 15)) {
+		System.out.println("Same");
+		return 0;
+	    }
+	    else
+		return otherNode.start - this.start;
 	}
     }
     public void print_StructureNode() {

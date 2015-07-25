@@ -8,6 +8,8 @@ public class Card {
     private Suit suit;
     private int number;
     private boolean isKey;
+    private boolean active;
+    
     public static enum Suit {
 	SPADE(0), HEART(1), DIAMOND(2), CLUB(3), L_JOKER(4), H_JOKER(5);
 	private int value;
@@ -88,6 +90,14 @@ public class Card {
 	}
 	return isKey;
     }
-
+    public void activate() {
+	active = true;
+    }
+    public void deactivate() {
+	active = false;
+    }
+    public boolean isActive() {
+	return active;
+    }
 	
 }
