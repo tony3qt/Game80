@@ -137,7 +137,7 @@ public class CardManager {
     public Card contains(Card.Suit suit, int number) {
 	Card card;
 	/* Key suit */
-	if(suit == gameInfo.key_Suit || number == gameInfo.key_Number || suit == Card.Suit.L_JOKER || suit == Card.Suit.H_JOKER) {
+	if(suit == gameInfo.get_Key_Suit() || number == gameInfo.get_Key_Number() || suit == Card.Suit.L_JOKER || suit == Card.Suit.H_JOKER) {
 	    for (int i=0; i<key_List.size(); i++) {
 		card = key_List.get(i);
 		if(card.getSuit() == suit && card.getNumber() == number  && !card.isActive()) {

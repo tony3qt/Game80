@@ -24,6 +24,7 @@ public abstract class Player {
     protected int total_Card_Number;
     protected int current_Card_Number;
 
+    protected CardStructure play_Structure;
 
     /** 
      * Player gets cards from shuffleGenerator, an instance of Shuffle class,
@@ -33,7 +34,7 @@ public abstract class Player {
     public Player(GameInfo gameInfo, int playerID, Shuffle shuffleGenerator) {
 	this.gameInfo = gameInfo;
 	this.playerID = playerID;
-	this.keyNumber = gameInfo.key_Number;
+	this.keyNumber = gameInfo.get_Key_Number();
 	this.NPlayer = gameInfo.NPlayer;
 	this.total_Card_Number = shuffleGenerator.allCards.length/NPlayer - 2;
 	this.cardpack = new Card[total_Card_Number];		
@@ -108,5 +109,11 @@ public abstract class Player {
     public CardManager get_Manager() {
 	return manager;
     }
-    
+
+    public void update_Play_Structure(CardStructure cs) {
+	play_Structure = cs;
+    }
+    public CardStructure get_Play_Structure() {
+	return play_Structure;
+    }
 }

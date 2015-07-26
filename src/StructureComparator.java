@@ -15,17 +15,17 @@ public class StructureComparator {
 
     public static int compare(CardStructure cs1, CardStructure cs2, CardStructure cs_template, GameInfo gameInfo) {
 	assert cs_template.get_Uniform_Suit() != null;
-	assert cs1.get_Uniform_Suit() == cs_template.get_Uniform_Suit() || cs1.get_Uniform_Suit() == gameInfo.key_Suit;
+	assert cs1.get_Uniform_Suit() == cs_template.get_Uniform_Suit() || cs1.get_Uniform_Suit() == gameInfo.get_Key_Suit();
 	assert cast(cs1, cs_template);
 
-	if (cs2.get_Uniform_Suit() == null || (cs2.get_Uniform_Suit() != cs_template.get_Uniform_Suit() && cs2.get_Uniform_Suit() != gameInfo.key_Suit) ) {
-	    return 1;
+	if (cs2.get_Uniform_Suit() == null || (cs2.get_Uniform_Suit() != cs_template.get_Uniform_Suit() && cs2.get_Uniform_Suit() != gameInfo.get_Key_Suit()) ) {
+	    return -1;
 	}
 	if (cast(cs2, cs_template)) {
 	    return cs1.get_Structure_List().get(0).compareTo(cs2.get_Structure_List().get(0));
 	}
 	else {
-	    return 1;
+	    return -1;
 	}
     }
 

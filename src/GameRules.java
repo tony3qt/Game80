@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+
 /**
  * GameRules class has a whole serial of static methods which test whether the cards are valid or not;
  * Those methods are called in Player.playCards();
@@ -37,6 +38,7 @@ public class GameRules {
 	CardStructure cs = new CardStructure(gameInfo, play_list);
 	if(cs.get_Uniform_Suit() != null) {
 	    gameInfo.update_Current_Structure(cs);
+	    player.update_Play_Structure(cs);
 	    return true;
 	}
 	else {
@@ -56,7 +58,8 @@ public class GameRules {
 	int max_num_other_suit = 0;
 	int num_other_suit = 0;
 	Card card;
-
+	ArrayList<Card> play_list = new ArrayList<Card>();
+	
 	if (play_suit_List.size() != total_Number) {
 	    System.out.println("Incorrect card number");
 	    return -1;
@@ -67,6 +70,10 @@ public class GameRules {
 	    if (card == null ) {
 		System.out.println("Doesn't not contain cards");
 		return -1;
+	    }
+	    else {
+		card.activate();
+		play_list.add(card);
 	    }
 	}
 	
@@ -83,6 +90,8 @@ public class GameRules {
 		    return -1;
 		}
 	    }
+	    CardStructure cs = new CardStructure(gameInfo, play_list);
+	    player.update_Play_Structure(cs);
 	    return max_num_other_suit;
 	}
 	else {
@@ -97,6 +106,8 @@ public class GameRules {
 		    return -1;
 		}
 	    }
+	    CardStructure cs = new CardStructure(gameInfo, play_list);
+	    player.update_Play_Structure(cs);
 	    return max_num_other_suit;
 	}
     }

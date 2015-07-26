@@ -26,7 +26,7 @@ public class Playboard {
     }
     public static void get_Table_card() {
 	gameInfo.update_IronThrone();
-	players[gameInfo.ironThrone].player_get_Table_card();
+	players[gameInfo.get_IronThrone()].player_get_Table_card();
     }
     
     public static void main(String[] args) {
@@ -72,19 +72,38 @@ public class Playboard {
 	}
 	*/
 
-	while(!players[0].playCards(true));
-	players[0].printOutCard_in_Order();
+	int starter_ID = 0;
+	int max_ID;
+
+	for (int i=0;i<=1;i++) {
+	while(!players[starter_ID].playCards(true));
+	players[starter_ID].printOutCard_in_Order();
 	
-	while(!players[1].playCards(false));
-	players[1].printOutCard_in_Order();
+	while(!players[(starter_ID+1)%4].playCards(false));
+	players[(starter_ID+1)%4].printOutCard_in_Order();
 
-	while(!players[2].playCards(false));
-	players[2].printOutCard_in_Order();
+	if (StructureComparator.compare(players[starter_ID].get_Play_Structure(), players[(starter_ID+1)%4].get_Play_Structure(), gameInfo) > 0) {
+	    max_ID = (starter_ID + 1)%4; System.out.println(max_ID); }
+	else { max_ID = (starter_ID); System.out.println(max_ID); }
 
-	while(!players[3].playCards(false));
-	players[3].printOutCard_in_Order();
+	while(!players[(starter_ID+2)%4].playCards(false));
+	players[(starter_ID+2)%4].printOutCard_in_Order();
+
+	if (StructureComparator.compare(players[max_ID].get_Play_Structure(), players[(starter_ID+2)%4].get_Play_Structure(), gameInfo.get_Current_Structure(), gameInfo) > 0) {
+	    max_ID = (starter_ID + 2)%4; System.out.println(max_ID); 
+	}
+
+	while(!players[(starter_ID+3)%4].playCards(false));
+	players[(starter_ID+3)%4].printOutCard_in_Order();
 	
+	if (StructureComparator.compare(players[max_ID].get_Play_Structure(), players[(starter_ID+3)%4].get_Play_Structure(), gameInfo.get_Current_Structure(), gameInfo) > 0) {
+	    max_ID = (starter_ID + 3)%4; System.out.println(max_ID); 
+	}
 
+	starter_ID = max_ID;
+
+	}
+	
 	Card card1 = new Card(Card.Suit.SPADE,2);
 	Card card2 = new Card(Card.Suit.SPADE,2);
 	Card card3 = new Card(Card.Suit.CLUB,2);

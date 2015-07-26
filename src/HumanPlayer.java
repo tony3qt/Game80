@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+
 /** 
  * HumanPlayer inherits from Player;
  * Card operations require input from command line; 
@@ -159,7 +160,9 @@ public class HumanPlayer extends Player {
 
 	manager.deactivate_All();
 	
+	
 	if(starter) {
+
 	    if (GameRules.test(this, play_suit_List, play_number_List, gameInfo)) {
 		manager.deactivate_All();
 		for (int i=0; i<play_suit_List.size(); i++) {
@@ -179,9 +182,11 @@ public class HumanPlayer extends Player {
 	    else { return false; }
 	}
 	else {
-	    if (GameRules.test(gameInfo.get_Current_Suit(), gameInfo.get_Current_Counts(), this, play_suit_List, play_number_List, gameInfo) == 0) {
+	    int test_Value = GameRules.test(gameInfo.get_Current_Suit(), gameInfo.get_Current_Counts(), this, play_suit_List, play_number_List, gameInfo);
+	    manager.deactivate_All();
+	    if (test_Value == 0) {
 		ArrayList<Card> play_List = new ArrayList<Card>();
-		manager.deactivate_All();
+	        
 		for (int i=0; i<play_suit_List.size(); i++) {
 		    play_List.add(contains(play_suit_List.get(i),play_number_List.get(i)));
 		}
@@ -196,7 +201,7 @@ public class HumanPlayer extends Player {
 		    return false;
 		}
 	    }
-	    else if (GameRules.test(gameInfo.get_Current_Suit(), gameInfo.get_Current_Counts(), this, play_suit_List, play_number_List, gameInfo) > 0) {
+	    else if (test_Value > 0) {
 		for (int i=0; i<play_suit_List.size(); i++) {
 		    remove(play_suit_List.get(i),play_number_List.get(i));
 		}

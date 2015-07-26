@@ -85,7 +85,7 @@ public class Card {
 	return isKey;
     }
     public boolean setKey(GameInfo gameInfo) {
-	if(this.number == gameInfo.key_Number || this.suit == gameInfo.key_Suit || this.suit == Card.Suit.H_JOKER || this.suit == Card.Suit.L_JOKER ) {
+	if(this.number == gameInfo.get_Key_Number() || this.suit == gameInfo.get_Key_Suit() || this.suit == Card.Suit.H_JOKER || this.suit == Card.Suit.L_JOKER ) {
 	    isKey = true;
 	}
 	return isKey;

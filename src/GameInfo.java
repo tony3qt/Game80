@@ -10,18 +10,19 @@ public class GameInfo {
     public boolean DEBUG;
     public int NPlayer;
     public int NPackage;
-    public int key_Number;
+    
+    private int key_Number;
     
     private boolean suit_Decleared;
     private boolean suit_Double_Decleared;
     private boolean suit_Queen_Decleared;
     private boolean suit_King_Decleared;
     
-    public Card.Suit key_Suit;
-    public int key_from_playerID;
+    private Card.Suit key_Suit;
+    private int key_from_playerID;
 
-    public int ironThrone;
-    public int ironThrone_temp;
+    private int ironThrone;
+    private int ironThrone_temp;
 
     private Card.Suit current_Suit;
     private int current_Counts;
@@ -123,5 +124,8 @@ public class GameInfo {
     }
     public int get_Key_Number() {
 	return key_Number;
+    }
+    public int get_IronThrone() {
+	return ironThrone;
     }
 }

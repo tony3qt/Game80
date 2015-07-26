@@ -26,19 +26,19 @@ public class CardStructure {
 	uniform_Suit = null;
 	card_Table = new int[0];
 	if (testSuit(args)) {
-	    if (uniform_Suit == gameInfo.key_Suit) {
-		if(gameInfo.key_Suit != Card.Suit.H_JOKER && gameInfo.key_Suit != Card.Suit.L_JOKER ) {
+	    if (uniform_Suit == gameInfo.get_Key_Suit()) {
+		if(gameInfo.get_Key_Suit() != Card.Suit.H_JOKER && gameInfo.get_Key_Suit() != Card.Suit.L_JOKER ) {
 		    card_Table = new int[gameInfo.CARD_IN_EACH_SUIT-1 + 4 + 2];
 		    for (Card card : args) {
 			card_Number ++;
-			if (card.getNumber() < gameInfo.key_Number && card.getSuit() != Card.Suit.H_JOKER && card.getSuit() != Card.Suit.L_JOKER)
+			if (card.getNumber() < gameInfo.get_Key_Number() && card.getSuit() != Card.Suit.H_JOKER && card.getSuit() != Card.Suit.L_JOKER)
 			    card_Table[card.getNumber()-2] ++;
-			else if (card.getNumber() > gameInfo.key_Number && card.getSuit() != Card.Suit.H_JOKER && card.getSuit() != Card.Suit.L_JOKER)
+			else if (card.getNumber() > gameInfo.get_Key_Number() && card.getSuit() != Card.Suit.H_JOKER && card.getSuit() != Card.Suit.L_JOKER)
 			    card_Table[card.getNumber()-3] ++;
-			else if (card.getNumber() == gameInfo.key_Number && card.getSuit() != gameInfo.key_Suit) 
-			    card_Table[(card.getSuit().getValue() - gameInfo.key_Suit.getValue()+4)%4 + gameInfo.CARD_IN_EACH_SUIT-2] ++ ;
+			else if (card.getNumber() == gameInfo.get_Key_Number() && card.getSuit() != gameInfo.get_Key_Suit()) 
+			    card_Table[(card.getSuit().getValue() - gameInfo.get_Key_Suit().getValue()+4)%4 + gameInfo.CARD_IN_EACH_SUIT-2] ++ ;
 
-			else if (card.getNumber() == gameInfo.key_Number && card.getSuit() == gameInfo.key_Suit)
+			else if (card.getNumber() == gameInfo.get_Key_Number() && card.getSuit() == gameInfo.get_Key_Suit())
 			    card_Table[gameInfo.CARD_IN_EACH_SUIT+2] ++ ;
 			else if (card.getSuit() == Card.Suit.L_JOKER)
 			    card_Table[gameInfo.CARD_IN_EACH_SUIT+3] ++ ;
@@ -50,7 +50,7 @@ public class CardStructure {
 		    card_Table = new int[6];
 		    for (Card card: args) {
 			card_Number ++;
-			if (card.getNumber() == gameInfo.key_Number) 
+			if (card.getNumber() == gameInfo.get_Key_Number()) 
 			    card_Table[card.getSuit().getValue()] ++ ;
 			else if (card.getSuit() == Card.Suit.L_JOKER)
 			    card_Table[4] ++ ;
@@ -63,7 +63,7 @@ public class CardStructure {
 	    else {
 		card_Table = new int[gameInfo.CARD_IN_EACH_SUIT-1];
 		for (Card card : args) {
-		    if(card.getNumber() < gameInfo.key_Number)
+		    if(card.getNumber() < gameInfo.get_Key_Number())
 			card_Table[card.getNumber()-2] ++;
 		    else
 			card_Table[card.getNumber()-3] ++;
@@ -90,7 +90,7 @@ public class CardStructure {
     public boolean testSuit(ArrayList<Card> args) {
 
 	if(args.get(0).isKey()) {
-	    uniform_Suit = gameInfo.key_Suit;
+	    uniform_Suit = gameInfo.get_Key_Suit();
 	    for (Card card : args) {
 		if (!card.isKey()) {
 		    //System.out.println("Error: Suit is not uniform!");
