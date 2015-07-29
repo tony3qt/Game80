@@ -28,6 +28,9 @@ public class GameInfo {
     private int current_Counts;
     private CardStructure current_Structure;
 
+    private int total_Scores;
+    private int current_Scores;
+    
     public GameInfo(int NPlayer, int NPackage, int key_Number,boolean debug) {
 	this.NPlayer = NPlayer;
 	this.NPackage = NPackage;
@@ -38,6 +41,12 @@ public class GameInfo {
 	this.ironThrone = -1;
     }
 
+    public void clear_Current_Scores() { current_Scores = 0; }
+    public void addTo_Current_Scores(int s) { current_Scores += s; }
+
+    public void update_Total_Scores() { total_Scores += current_Scores; }
+    public int get_Total_Scores() { return total_Scores; }
+    
     public void update_Current_Suit(Card.Suit suit) {
 	current_Suit = suit;
     }

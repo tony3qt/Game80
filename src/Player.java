@@ -71,13 +71,15 @@ public abstract class Player {
      * If the player takes the IronThrone for this round, 
      * then player_get_Table_card() will be called to collect the left eight cards on table.
      */
-    public void player_get_Table_card() {
+    public void player_get_Table_Card() {
 	
 	this.table_Cards = new Card[2*NPlayer];
 	for(int i=0;i<2*NPlayer;i++) {
 	    table_Cards[i] = shuffleGenerator.allCards[total_Card_Number*NPlayer+i];
 	}
     }
+
+    public abstract boolean player_set_Table_Card();
     
     public abstract boolean playCards(boolean starter) ;
 

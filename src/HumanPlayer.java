@@ -160,12 +160,13 @@ public class HumanPlayer extends Player {
 
 	manager.deactivate_All();
 	
-	
 	if(starter) {
 
 	    if (GameRules.test(this, play_suit_List, play_number_List, gameInfo)) {
 		manager.deactivate_All();
 		for (int i=0; i<play_suit_List.size(); i++) {
+		    if(play_number_List.get(i) == 5) { gameInfo.addTo_Current_Scores(5); }
+		    if(play_number_List.get(i) == 10 || play_number_List.get(i) == 13) { gameInfo.addTo_Current_Scores(10); }
 		    remove(play_suit_List.get(i),play_number_List.get(i));
 		}
 	       	  
@@ -193,6 +194,8 @@ public class HumanPlayer extends Player {
 		if (GameRules.check_Optimal_Rule(gameInfo.get_Current_Structure(), play_List, this, gameInfo)) {
 		    manager.deactivate_All();
 		    for (int i=0; i<play_suit_List.size(); i++) {
+			if(play_number_List.get(i) == 5) { gameInfo.addTo_Current_Scores(5); }
+			if(play_number_List.get(i) == 10 || play_number_List.get(i) == 13) { gameInfo.addTo_Current_Scores(10); }
 			remove(play_suit_List.get(i),play_number_List.get(i));
 		    }
 		    return true;
@@ -203,6 +206,8 @@ public class HumanPlayer extends Player {
 	    }
 	    else if (test_Value > 0) {
 		for (int i=0; i<play_suit_List.size(); i++) {
+		    if(play_number_List.get(i) == 5) { gameInfo.addTo_Current_Scores(5); }
+		    if(play_number_List.get(i) == 10 || play_number_List.get(i) == 13) { gameInfo.addTo_Current_Scores(10); }
 		    remove(play_suit_List.get(i),play_number_List.get(i));
 		}
 		return true;
@@ -210,6 +215,105 @@ public class HumanPlayer extends Player {
 	    else { return false; }
 	}
     }
-    
+
+    @Override
+    public boolean player_set_Table_Card() {
+	ArrayList<Card.Suit> table_suit_List = new ArrayList<Card.Suit>();
+	ArrayList<Integer> table_number_List = new ArrayList<Integer>();
+	
+	Scanner scan= new Scanner(System.in);
+	scan.useDelimiter("\\n");
+	System.out.println("Player ID = " + playerID + " : Put 8 cards on table");
+	Card card;
+	String command = scan.nextLine();
+	char char_suit;
+	int number;
+	
+	while (!command.equals("")) {
+	    char_suit = command.charAt(0);
+	    number = Integer.parseInt(command.substring(1));
+	    switch(char_suit) {
+	    case 's':
+		if(number<=14 && number>=2) {
+		    card = contains(Card.Suit.SPADE, number);
+		    if (card != null) {
+			table_suit_List.add(Card.Suit.SPADE);
+			table_number_List.add(number);
+		    }
+		    else return false;
+		}
+		else return false;
+		break;
+	     case 'h':
+        	if(number<=14 && number>=2) {
+		    card = contains(Card.Suit.HEART, number);
+		    if (card != null) {
+	        	table_suit_List.add(Card.Suit.HEART);
+			table_number_List.add(number);
+		    }
+		    else return false;
+		}
+		else return false;
+		break;
+	    case 'd':
+        	if(number<=14 && number>=2) {
+		    card = contains(Card.Suit.DIAMOND, number);
+		    if (card != null) {
+	        	table_suit_List.add(Card.Suit.DIAMOND);
+			table_number_List.add(number);
+		    }
+		    else return false;
+		}
+		else return false;
+		break;
+	    case 'c':
+        	if(number<=14 && number>=2) {
+		    card = contains(Card.Suit.CLUB, number);
+		    if (card != null) {
+			table_suit_List.add(Card.Suit.CLUB);
+			table_number_List.add(number);
+		    }
+		    else return false;
+		}
+		else return false;
+		break;
+	    case 'q':
+        	if(number<=14 && number>=2) {
+		    card = contains(Card.Suit.L_JOKER, number);
+		    if (card != null) {
+			table_suit_List.add(Card.Suit.L_JOKER);
+			table_number_List.add(number);
+		    }
+		    else return false;
+		}
+		else return false;
+		break;
+	    case 'k':
+        	if(number<=14 && number>=2) {
+		    card = contains(Card.Suit.H_JOKER, number);
+		    if (card != null) {
+			table_suit_List.add(Card.Suit.H_JOKER);
+			table_number_List.add(number);
+		    }
+		    else return false;
+		}
+		else return false;
+		break;
+	    default: return false;
+	    }
+	    command = scan.nextLine();
+	}
+	manager.deactivate_All();
+	assert table_suit_List.size() == table_number_List.size();
+	if (table_number_List.size() != gameInfo.NPackage*4)
+	    return false;
+	else {
+	    for(int i=0; i<gameInfo.NPackage*4; i++) {
+		manager.remove(table_suit_List.get(i), table_number_List.get(i));
+	    }
+	}
+	manager.deactivate_All();
+	return true;
+    }
 	
 }
