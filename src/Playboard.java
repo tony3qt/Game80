@@ -81,14 +81,14 @@ public class Playboard {
 	    while(!players[(starter_ID+1)%4].playCards(false));
 	    players[(starter_ID+1)%4].printOutCard_in_Order();
 	    
-	    if (StructureComparator.compare(players[starter_ID].get_Play_Structure(), players[(starter_ID+1)%4].get_Play_Structure(), gameInfo) > 0) {
+	    if (CardStructure.compare(players[starter_ID].get_Play_Structure(), players[(starter_ID+1)%4].get_Play_Structure(), gameInfo) > 0) {
 		max_ID = (starter_ID + 1)%4; System.out.println(max_ID); }
 	    else { max_ID = (starter_ID); System.out.println(max_ID); }
 	    
 	    while(!players[(starter_ID+2)%4].playCards(false));
 	    players[(starter_ID+2)%4].printOutCard_in_Order();
 	    
-	    if (StructureComparator.compare(players[max_ID].get_Play_Structure(),
+	    if (CardStructure.compare(players[max_ID].get_Play_Structure(),
 					    players[(starter_ID+2)%4].get_Play_Structure(), gameInfo.get_Current_Structure(), gameInfo) > 0) {
 	    max_ID = (starter_ID + 2)%4; System.out.println(max_ID); 
 	    }
@@ -96,7 +96,7 @@ public class Playboard {
 	    while(!players[(starter_ID+3)%4].playCards(false));
 	    players[(starter_ID+3)%4].printOutCard_in_Order();
 	    
-	    if (StructureComparator.compare(players[max_ID].get_Play_Structure(),
+	    if (CardStructure.compare(players[max_ID].get_Play_Structure(),
 					    players[(starter_ID+3)%4].get_Play_Structure(), gameInfo.get_Current_Structure(), gameInfo) > 0) {
 		max_ID = (starter_ID + 3)%4; System.out.println(max_ID); 
 	    }
@@ -151,10 +151,10 @@ public class Playboard {
 	cs2.printTable();
 	cs1.printTable();
 	
-	if (StructureComparator.compare(cs1,cs2,gameInfo) > 0) {
+	if (CardStructure.compare(cs1,cs2,gameInfo) > 0) {
 	    System.out.println("<");
 	}
-	else if (StructureComparator.compare(cs1,cs2,gameInfo) < 0) {
+	else if (CardStructure.compare(cs1,cs2,gameInfo) < 0) {
 	    System.out.println(">");
 	}
 	else

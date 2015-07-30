@@ -116,12 +116,12 @@ public class GameRules {
 	ArrayList<Boolean> to_play;
 	assert cs.get_Uniform_Suit() != null;
 
-	to_play = StructureComparator.structure_Analyze(cs, card_List, gameInfo);
+	to_play = CardStructure.structure_Analyze(cs, card_List, gameInfo);
 	    
 	if(cs.get_Uniform_Suit()==gameInfo.get_Key_Suit())
-	    total_in_hand = StructureComparator.structure_Analyze(cs, player.get_Manager().get_key_List(), gameInfo);
+	    total_in_hand = CardStructure.structure_Analyze(cs, player.get_Manager().get_key_List(), gameInfo);
 	else
-	    total_in_hand = StructureComparator.structure_Analyze(cs, player.get_Manager().get_List(cs.get_Uniform_Suit()), gameInfo);
+	    total_in_hand = CardStructure.structure_Analyze(cs, player.get_Manager().get_List(cs.get_Uniform_Suit()), gameInfo);
 
 	assert to_play.size() == total_in_hand.size();
 	for(int i=0; i<to_play.size(); i++) {
