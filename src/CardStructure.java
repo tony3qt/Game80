@@ -121,7 +121,7 @@ public class CardStructure {
 	    System.out.print(card_Table_Renormalized[i] + " ");
 	}
     }
-    public void renormalize() {
+    private void renormalize() {
 	card_Table_Renormalized = new int[card_Table.length];
 	// Copy card_Table to card_Table_Renormalized;
 	for(int i=0; i<card_Table.length; i++) {
@@ -173,7 +173,7 @@ public class CardStructure {
 	}
 	
     }
-    public void generateStructure() {
+    private void generateStructure() {
 	structure_List = new ArrayList<StructureNode> ();
 	for (int i=0;i<card_Table_Renormalized.length;i++) {
 	    if(card_Table_Renormalized[i]!=0)
@@ -187,9 +187,9 @@ public class CardStructure {
 
     public Card.Suit get_Uniform_Suit() { return uniform_Suit; }
 
-    public ArrayList<StructureNode> get_Structure_List() { return structure_List; }
-
     public int get_Card_Number() { return card_Number; }
+
+    private ArrayList<StructureNode> get_Structure_List() { return structure_List; }
 
      /**
      * CardStructure cs could be changed.
