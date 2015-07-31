@@ -237,7 +237,14 @@ public class CardStructure {
 	assert cs1.get_Uniform_Suit() == cs_template.get_Uniform_Suit() || cs1.get_Uniform_Suit() == gameInfo.get_Key_Suit();
 	assert CardStructure.cast(cs1, cs_template);
 
-	if (cs2.get_Uniform_Suit() == null || (cs2.get_Uniform_Suit() != cs_template.get_Uniform_Suit() && cs2.get_Uniform_Suit() != gameInfo.get_Key_Suit()) ) {
+	if (cs2.get_Uniform_Suit() == null || ((cs2.get_Uniform_Suit() != cs_template.get_Uniform_Suit() && cs2.get_Uniform_Suit() != gameInfo.get_Key_Suit())) ) {
+	    return -1;
+	}
+	if (cs2.get_Uniform_Suit() == gameInfo.get_Key_Suit() && cs1.get_Uniform_Suit() != gameInfo.get_Key_Suit() &&
+	    CardStructure.cast(cs2, cs_template)) { 
+	    return 1;
+	}
+	if (cs2.get_Uniform_Suit() != gameInfo.get_Key_Suit() && cs1.get_Uniform_Suit() == gameInfo.get_Key_Suit() ) {
 	    return -1;
 	}
 	if (CardStructure.cast(cs2, cs_template)) {
@@ -248,37 +255,6 @@ public class CardStructure {
 	}
     }
 
-    
-    /**
-     * Inner class
-     */
-    static class StructureNode implements Comparable<StructureNode> {
-
-	int type;
-	int start;
-	public StructureNode(int type, int start) {
-	    this.type = type;
-	    this.start = start;
-	}
-	
-	@Override
-	public int compareTo(StructureNode otherNode) {
-	    if (this.type != otherNode.type) {
-		return otherNode.type - this.type;
-	    }
-	    else {
-		if((otherNode.start > 11) && (otherNode.start < 15) && (this.start >11) && (this.start < 15)) {
-		    System.out.println("Same");
-		    return 0;
-		}
-		else
-		    return otherNode.start - this.start;
-	    }
-	}
-	public void print_StructureNode() {
-	System.out.println("( " + type + " , " + start + " )");
-	}
-    }
     
     public static ArrayList<Boolean> structure_Analyze( CardStructure cs, ArrayList<Card> card_List, GameInfo gameInfo) {
 	assert cs.get_Uniform_Suit() != null;
@@ -313,5 +289,36 @@ public class CardStructure {
 	
 	assert structure_Boolean_List.size() == size;
 	return structure_Boolean_List;
+    }
+
+     /**
+     * Inner class
+     */
+    static class StructureNode implements Comparable<StructureNode> {
+
+	int type;
+	int start;
+	public StructureNode(int type, int start) {
+	    this.type = type;
+	    this.start = start;
+	}
+	
+	@Override
+	public int compareTo(StructureNode otherNode) {
+	    if (this.type != otherNode.type) {
+		return otherNode.type - this.type;
+	    }
+	    else {
+		if((otherNode.start > 11) && (otherNode.start < 15) && (this.start >11) && (this.start < 15)) {
+		    System.out.println("Same");
+		    return 0;
+		}
+		else
+		    return otherNode.start - this.start;
+	    }
+	}
+	public void print_StructureNode() {
+	System.out.println("( " + type + " , " + start + " )");
+	}
     }
 }

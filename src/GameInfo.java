@@ -18,6 +18,7 @@ public class GameInfo {
     private boolean suit_Queen_Decleared;
     private boolean suit_King_Decleared;
     
+    
     private Card.Suit key_Suit;
     private int key_from_playerID;
 
@@ -30,6 +31,7 @@ public class GameInfo {
 
     private int total_Scores;
     private int current_Scores;
+    private int number_Of_Cards_Played;
     
     public GameInfo(int NPlayer, int NPackage, int key_Number,boolean debug) {
 	this.NPlayer = NPlayer;
@@ -55,7 +57,11 @@ public class GameInfo {
     }
     public void update_Current_Counts(int counts) {
 	current_Counts = counts;
+	number_Of_Cards_Played += counts;
     }
+
+    public int get_Number_Of_Cards_Played() { return number_Of_Cards_Played; }
+
     public int get_Current_Counts() {
 	return current_Counts;
     }

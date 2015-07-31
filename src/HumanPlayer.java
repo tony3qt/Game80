@@ -1,6 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
-
+import java.lang.NumberFormatException;
 /** 
  * HumanPlayer inherits from Player;
  * Card operations require input from command line; 
@@ -109,7 +109,12 @@ public class HumanPlayer extends Player {
 	
 	while (!command.equals("")) {
 	    char_suit = command.charAt(0);
-	    number = Integer.parseInt(command.substring(1));
+	    try {
+		number = Integer.parseInt(command.substring(1));
+	    }
+	    catch(NumberFormatException e) {
+		return false;
+	    }
 	    switch(char_suit) {
 	    case 's':
 		if(number<=14 && number>=2) {
@@ -231,7 +236,12 @@ public class HumanPlayer extends Player {
 	
 	while (!command.equals("")) {
 	    char_suit = command.charAt(0);
-	    number = Integer.parseInt(command.substring(1));
+	    try {
+		number = Integer.parseInt(command.substring(1));
+	    }
+	    catch(NumberFormatException e) {
+		return false;
+	    }
 	    switch(char_suit) {
 	    case 's':
 		if(number<=14 && number>=2) {

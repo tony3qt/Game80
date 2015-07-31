@@ -71,30 +71,32 @@ public class Playboard {
 	int starter_ID = gameInfo.get_IronThrone();
 	int max_ID;
 
-	for (int i=0;i<=1;i++) {
+	while(gameInfo.get_Number_Of_Cards_Played() < (gameInfo.CARD_IN_EACH_PACKAGE-2)*gameInfo.NPackage/gameInfo.NPlayer ) {
 
 	    gameInfo.clear_Current_Scores();
-	    
-	    while(!players[starter_ID].playCards(true));
+
 	    players[starter_ID].printOutCard_in_Order();
-	    
-	    while(!players[(starter_ID+1)%4].playCards(false));
+	    while(!players[starter_ID].playCards(true));
+
 	    players[(starter_ID+1)%4].printOutCard_in_Order();
+	    while(!players[(starter_ID+1)%4].playCards(false));
 	    
 	    if (CardStructure.compare(players[starter_ID].get_Play_Structure(), players[(starter_ID+1)%4].get_Play_Structure(), gameInfo) > 0) {
 		max_ID = (starter_ID + 1)%4; System.out.println(max_ID); }
 	    else { max_ID = (starter_ID); System.out.println(max_ID); }
 	    
-	    while(!players[(starter_ID+2)%4].playCards(false));
+	    
 	    players[(starter_ID+2)%4].printOutCard_in_Order();
+	    while(!players[(starter_ID+2)%4].playCards(false));	   
 	    
 	    if (CardStructure.compare(players[max_ID].get_Play_Structure(),
 					    players[(starter_ID+2)%4].get_Play_Structure(), gameInfo.get_Current_Structure(), gameInfo) > 0) {
 	    max_ID = (starter_ID + 2)%4; System.out.println(max_ID); 
 	    }
+
 	    
-	    while(!players[(starter_ID+3)%4].playCards(false));
 	    players[(starter_ID+3)%4].printOutCard_in_Order();
+	    while(!players[(starter_ID+3)%4].playCards(false));
 	    
 	    if (CardStructure.compare(players[max_ID].get_Play_Structure(),
 					    players[(starter_ID+3)%4].get_Play_Structure(), gameInfo.get_Current_Structure(), gameInfo) > 0) {
