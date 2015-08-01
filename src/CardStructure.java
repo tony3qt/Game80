@@ -15,7 +15,7 @@ public class CardStructure {
     int card_Number;
     
     ArrayList<StructureNode> structure_List;
-
+    
     /**
      * Construct a table(card_Table) of size equals the size of cards'suit, each element is 0, 1 or 2;
      * renomalize() groups cards if a double of a truck exists;
@@ -187,6 +187,8 @@ public class CardStructure {
 
     public Card.Suit get_Uniform_Suit() { return uniform_Suit; }
 
+    public int size() { return structure_List.size(); }
+
     public int get_Card_Number() { return card_Number; }
 
     private ArrayList<StructureNode> get_Structure_List() { return structure_List; }
@@ -194,7 +196,7 @@ public class CardStructure {
      /**
      * CardStructure cs could be changed.
      */
-    public static boolean cast (CardStructure cs, CardStructure cs_template) {
+    private static boolean cast (CardStructure cs, CardStructure cs_template) {
 
 	assert cs_template.get_Uniform_Suit() != null;
 	assert cs_template.card_Number == cs.card_Number;
@@ -256,6 +258,10 @@ public class CardStructure {
     }
 
     
+    /**
+     * Return a ArrayList of Boolean the same size as structure_List of cs. 
+     * Each boolean indicates whether there coulbe be a same structureNode in card_List.
+     */
     public static ArrayList<Boolean> structure_Analyze( CardStructure cs, ArrayList<Card> card_List, GameInfo gameInfo) {
 	assert cs.get_Uniform_Suit() != null;
 	CardStructure cs_test = new CardStructure(gameInfo, card_List);
@@ -266,7 +272,7 @@ public class CardStructure {
 	int size = cs.get_Structure_List().size();
 	ArrayList<Boolean> structure_Boolean_List = new ArrayList<Boolean>();
 	int j = 0;
-	for(int i=0;i<size; i++) {
+	for(int i=0; i<size; i++) {
 	    type1 = cs.get_Structure_List().get(i).type;
 	    type2 = cs_test.get_Structure_List().get(j).type;
 	    if(type1 > type2) {
@@ -291,6 +297,112 @@ public class CardStructure {
 	return structure_Boolean_List;
     }
 
+    public static ArrayList<Card> structure_Node_Analyze(CardStructure cs, Player player, int index, int ID, GameInfo gameInfo) {
+
+	assert cs.get_Uniform_Suit() != null;
+	assert cs.size() > index;
+	
+	Card.Suit suit = cs.get_Uniform_Suit();
+	CardStructure cs_test;
+	ArrayList<Card> returnList = new ArrayList<Card>();
+	int type = cs.get_Structure_List().get(index).type;
+	int start = cs.get_Structure_List().get(index).start;
+	
+	if (suit == gameInfo.get_Key_Suit()) {
+	    cs_test = new CardStructure(gameInfo, gameInfo.players[ID].get_Manager().get_key_List());
+	    Card.Suit key_suit_in_array[] = new Card.Suit[18];
+	    for(int i=0; i<12; i++) {
+		key_suit_in_array[i] = gameInfo.get_Key_Suit();
+	    }
+	    key_suit_in_array[12] = Card.Suit.getSuit((gameInfo.get_Key_Suit().getValue()+1)%4);
+	    key_suit_in_array[13] = Card.Suit.getSuit((gameInfo.get_Key_Suit().getValue()+2)%4);
+	    key_suit_in_array[14] = Card.Suit.getSuit((gameInfo.get_Key_Suit().getValue()+3)%4);
+	    key_suit_in_array[15] = gameInfo.get_Key_Suit();
+	    key_suit_in_array[16] = Card.Suit.getSuit(4);
+	    key_suit_in_array[17] = Card.Suit.getSuit(5);
+
+	    int size = cs_test.get_Structure_List().size();
+	    for(int j=0; j<size; ) {
+		int type_test = cs_test.get_Structure_List().get(j).type;
+		int start_test = cs_test.get_Structure_List().get(j).start;
+		if (type > type_test) { return null; }
+		else if (type == type_test) {
+		    if (cs.get_Structure_List().get(index).compareTo(cs_test.get_Structure_List().get(j)) <=0 ) { return null; }
+		    else {
+			for (int n=0; n<type; n++) {
+			    if(start+n/2+2 < gameInfo.get_Key_Number() && start+n/2 < 12)
+				returnList.add(player.contains(key_suit_in_array[start+n/2], start+n/2+2));
+			    else if(start+n/2+2 > gameInfo.get_Key_Number() && start+n/2 < 12) {
+				returnList.add(player.contains(key_suit_in_array[start+n/2], start+n/2+3));
+			    }
+			    else if(start+n/2 >= 12 && start+n/2<=15) {
+				returnList.add(player.contains(key_suit_in_array[start+n/2], gameInfo.get_Key_Number()));
+			    }
+			    else { returnList.add(player.contains(key_suit_in_array[start+n/2], 0)); }
+			}
+			player.get_Manager().deactivate_All();
+			return returnList;
+		    }
+		}
+		else {
+		    if (start < start_test) {
+			for (int n=0; n<type; n++) {
+			    if(start+n/2+2 < gameInfo.get_Key_Number())
+				returnList.add(player.contains(suit, start+n/2+2));
+			    else
+				returnList.add(player.contains(suit, start+n/2+3));
+			}
+			player.get_Manager().deactivate_All();
+			return returnList;
+		    }
+		    else {j++;}
+		}
+	    }
+
+
+	    
+	}
+	else { 
+	    cs_test = new CardStructure(gameInfo, gameInfo.players[ID].get_Manager().get_List(suit));
+	
+	    int size = cs_test.get_Structure_List().size();
+	    for(int j=0; j<size; ) {
+		int type_test = cs_test.get_Structure_List().get(j).type;
+		int start_test = cs_test.get_Structure_List().get(j).start;
+		if (type > type_test) { return null; }
+		else if (type == type_test) {
+		    if (cs.get_Structure_List().get(index).compareTo(cs_test.get_Structure_List().get(j)) <=0 ) { return null; }
+		    else {
+			for (int n=0; n<type; n++) {
+			    if(start+n/2+2 < gameInfo.get_Key_Number())
+				returnList.add(player.contains(suit, start+n/2+2));
+			    else
+				returnList.add(player.contains(suit, start+n/2+3));
+			}
+			player.get_Manager().deactivate_All();
+			return returnList;
+		    }
+		}
+		else {
+		    if (start < start_test) {
+			for (int n=0; n<type; n++) {
+			    if(start+n/2+2 < gameInfo.get_Key_Number())
+				returnList.add(player.contains(suit, start+n/2+2));
+			    else
+				returnList.add(player.contains(suit, start+n/2+3));
+			}
+			player.get_Manager().deactivate_All();
+			return returnList;
+		    }
+		    else {j++;}
+		}
+	    }
+		
+	    
+	}
+	return null;
+    }
+
      /**
      * Inner class
      */
@@ -310,7 +422,7 @@ public class CardStructure {
 	    }
 	    else {
 		if((otherNode.start > 11) && (otherNode.start < 15) && (this.start >11) && (this.start < 15)) {
-		    System.out.println("Same");
+		    //System.out.println("Same");
 		    return 0;
 		}
 		else

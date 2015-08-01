@@ -19,8 +19,14 @@ public class Card {
 	public int getValue() {
 	    return this.value;
 	}
-
-
+	public static Suit getSuit(int value) {
+	    for(Suit suit : Suit.values()) {
+		if (suit.value == value)
+		    return suit;
+	    }
+	    return null;
+	}
+	
 	 @Override
 	public String toString() {
 	    switch(this) {
@@ -99,5 +105,7 @@ public class Card {
     public boolean isActive() {
 	return active;
     }
-	
+
+    public Suit suit() { return suit; }
+    public int number() { return number; }
 }

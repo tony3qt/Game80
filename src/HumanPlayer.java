@@ -173,8 +173,13 @@ public class HumanPlayer extends Player {
 		    if(play_number_List.get(i) == 5) { gameInfo.addTo_Current_Scores(5); }
 		    if(play_number_List.get(i) == 10 || play_number_List.get(i) == 13) { gameInfo.addTo_Current_Scores(10); }
 		    remove(play_suit_List.get(i),play_number_List.get(i));
+		    System.out.print(play_suit_List.get(i));
+		    System.out.print(play_number_List.get(i) + " ");
+		    
 		}
-	       	  
+		System.out.println();
+	       	manager.deactivate_All();
+		
 		gameInfo.update_Current_Counts(play_suit_List.size());
 		if(play_suit_List.get(0) == gameInfo.get_Key_Suit() || play_number_List.get(0) == gameInfo.get_Key_Number()
 		   || play_suit_List.get(0) == Card.Suit.L_JOKER || play_suit_List.get(0) == Card.Suit.H_JOKER) {
@@ -202,7 +207,10 @@ public class HumanPlayer extends Player {
 			if(play_number_List.get(i) == 5) { gameInfo.addTo_Current_Scores(5); }
 			if(play_number_List.get(i) == 10 || play_number_List.get(i) == 13) { gameInfo.addTo_Current_Scores(10); }
 			remove(play_suit_List.get(i),play_number_List.get(i));
+			System.out.print(play_suit_List.get(i));
+			System.out.print(play_number_List.get(i) + " ");
 		    }
+		    System.out.println();
 		    return true;
 		}
 		else {
@@ -320,6 +328,8 @@ public class HumanPlayer extends Player {
 	else {
 	    for(int i=0; i<gameInfo.NPackage*4; i++) {
 		manager.remove(table_suit_List.get(i), table_number_List.get(i));
+		if(table_number_List.get(i) == 5) { gameInfo.update_Table_Scores(5); }
+		else if(table_number_List.get(i) == 10 || table_number_List.get(i) == 13) { gameInfo.update_Table_Scores(10); }
 	    }
 	}
 	manager.deactivate_All();

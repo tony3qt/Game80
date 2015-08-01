@@ -32,6 +32,10 @@ public class GameInfo {
     private int total_Scores;
     private int current_Scores;
     private int number_Of_Cards_Played;
+
+    private int table_Scores;
+
+    public Player[] players;
     
     public GameInfo(int NPlayer, int NPackage, int key_Number,boolean debug) {
 	this.NPlayer = NPlayer;
@@ -41,6 +45,7 @@ public class GameInfo {
 	this.current_Suit = null;
 	this.DEBUG = debug;
 	this.ironThrone = -1;
+	this.players = new Player[4];
     }
 
     public void clear_Current_Scores() { current_Scores = 0; }
@@ -48,6 +53,9 @@ public class GameInfo {
 
     public void update_Total_Scores() { total_Scores += current_Scores; }
     public int get_Total_Scores() { return total_Scores; }
+
+    public void update_Table_Scores(int s) {table_Scores += s; }
+    public int get_Table_Scores() { return table_Scores; }
     
     public void update_Current_Suit(Card.Suit suit) {
 	current_Suit = suit;

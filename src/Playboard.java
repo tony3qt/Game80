@@ -48,6 +48,7 @@ public class Playboard {
 	int keyNumber = 2;
 	gameInfo = new GameInfo(NPlayer,NPackage,keyNumber,debug);
 	players = new Player[NPlayer];
+	gameInfo.players = players;
 	
 
 	shuffle_Cards();
@@ -71,7 +72,7 @@ public class Playboard {
 	int starter_ID = gameInfo.get_IronThrone();
 	int max_ID;
 
-	while(gameInfo.get_Number_Of_Cards_Played() < (gameInfo.CARD_IN_EACH_PACKAGE-2)*gameInfo.NPackage/gameInfo.NPlayer ) {
+	while(gameInfo.get_Number_Of_Cards_Played() < (gameInfo.CARD_IN_EACH_PACKAGE-4)*gameInfo.NPackage/gameInfo.NPlayer ) {
 
 	    gameInfo.clear_Current_Scores();
 
@@ -108,7 +109,11 @@ public class Playboard {
 	    }
 	    starter_ID = max_ID;
 	    System.out.println("Scores : " + gameInfo.get_Total_Scores());
+	    System.out.println("Number of Cards Played :" + gameInfo.get_Number_Of_Cards_Played());
 	}
+
+	System.out.println("Total Scores = " + (gameInfo.get_Total_Scores() + gameInfo.get_Table_Scores()*gameInfo.get_Current_Structure().structure_List.get(0).type) );
+	
 	
 	Card card1 = new Card(Card.Suit.SPADE,2);
 	Card card2 = new Card(Card.Suit.SPADE,2);

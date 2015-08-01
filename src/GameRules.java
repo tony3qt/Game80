@@ -17,6 +17,7 @@ public class GameRules {
      * Suit is not specified yet;
      * But all the cards must have uniform suit;
      * The player must have those cards in hand.
+     * play_suit_List and play_number_List may be modified;
      */
     public static boolean test(Player player, ArrayList<Card.Suit> play_suit_List, ArrayList<Integer> play_number_List, GameInfo gameInfo) {
 
@@ -35,8 +36,28 @@ public class GameRules {
 		play_list.add(card);
 	    }
 	}
+	player.get_Manager().deactivate_All();
+	
 	CardStructure cs = new CardStructure(gameInfo, play_list);
-	if(cs.get_Uniform_Suit() != null) {
+
+	for (int t=0; t<cs.size(); t++) {
+	    for (int i=1; i<4; i++) {
+		int ID = (player.get_ID() + i)%4;
+		ArrayList<Card> return_Cards = CardStructure.structure_Node_Analyze(cs, player, t, ID, gameInfo) ;
+		if( return_Cards != null) {
+		    cs = new CardStructure(gameInfo, return_Cards);
+		    play_suit_List.clear();
+		    play_number_List.clear();
+		    for (Card c : return_Cards) {
+			play_suit_List.add(c.suit());
+			play_number_List.add(c.number());
+		    }
+		    break;
+		}
+	    }
+	}
+	
+	if (cs.get_Uniform_Suit() != null) {
 	    gameInfo.update_Current_Structure(cs);
 	    player.update_Play_Structure(cs);
 	    return true;
@@ -45,6 +66,7 @@ public class GameRules {
 	    System.out.println("Cards suit not uniform");
 	    return false;
 	}
+
     }
 
     /**
