@@ -229,6 +229,11 @@ public class HumanPlayer extends Player {
 	}
     }
 
+    /**
+     * Read from user's input;
+     * Check the player indeed has those cards;
+     * Remve and return true if cards are valid, return false otherwise.
+     */
     @Override
     public boolean player_set_Table_Card() {
 	ArrayList<Card.Suit> table_suit_List = new ArrayList<Card.Suit>();

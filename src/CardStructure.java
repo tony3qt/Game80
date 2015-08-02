@@ -194,17 +194,6 @@ public class CardStructure {
 
     private ArrayList<StructureNode> get_Structure_List() { return structure_List; }
     
-    private boolean downcast() {
-	if (structure_List.get(0).type<4) return false;
-	else {
-	    structure_List.get(0).type -= 2;
-	    structure_List.add(new StructureNode(structure_List.get(0).start,2));
-	    structure_List.get(0).start += 1;
-	    Collections.sort(structure_List);
-	    return true;
-	}
-    }
-    
     
      /**
       * Reorganize the structureNode of cs, to get the same structure as cs_template;
@@ -274,8 +263,10 @@ public class CardStructure {
 
     
     /**
-     * Return a ArrayList of Boolean the same size as structure_List of cs. 
+     * Return a ArrayList of Boolean. 
      * Each boolean indicates whether there coulbe be a same structureNode in card_List.
+     * cs could be modified in the process, but cs.generatestructure() restore it back.
+     * This function will be used in GameRules.check_Optimal_Rule.
      */
     public static ArrayList<Boolean> structure_Analyze( CardStructure cs, ArrayList<Card> card_List, GameInfo gameInfo) {
 	assert cs.get_Uniform_Suit() != null;
