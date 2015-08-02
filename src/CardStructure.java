@@ -25,7 +25,8 @@ public class CardStructure {
 	this.gameInfo = gameInfo;
 	uniform_Suit = null;
 	card_Table = new int[0];
-	if (testSuit(args)) {
+ 
+	if (args != null && args.size() != 0 && testSuit(args)) {
 	    if (uniform_Suit == gameInfo.get_Key_Suit()) {
 		if(gameInfo.get_Key_Suit() != Card.Suit.H_JOKER && gameInfo.get_Key_Suit() != Card.Suit.L_JOKER ) {
 		    card_Table = new int[gameInfo.CARD_IN_EACH_SUIT-1 + 4 + 2];
@@ -89,6 +90,7 @@ public class CardStructure {
      */
     public boolean testSuit(ArrayList<Card> args) {
 
+	//if(args.size() == 0) return true;
 	if(args.get(0).isKey()) {
 	    uniform_Suit = gameInfo.get_Key_Suit();
 	    for (Card card : args) {
@@ -192,7 +194,7 @@ public class CardStructure {
 
     public int get_Card_Number() { return card_Number; }
 
-    private ArrayList<StructureNode> get_Structure_List() { return structure_List; }
+    public ArrayList<StructureNode> get_Structure_List() { return structure_List; }
     
     
      /**
@@ -378,6 +380,7 @@ public class CardStructure {
 		else if (type == type_test) {
 		    if (cs.get_Structure_List().get(index).compareTo(cs_test.get_Structure_List().get(j)) <=0 ) { return null; }
 		    else {
+			player.get_Manager().deactivate_All();
 			for (int n=0; n<type; n++) {
 			    if(start+n/2+2 < gameInfo.get_Key_Number() && start+n/2 < 12)
 				returnList.add(player.contains(key_suit_in_array[start+n/2], start+n/2+2));
@@ -397,9 +400,9 @@ public class CardStructure {
 		    if (start < start_test) {
 			for (int n=0; n<type; n++) {
 			    if(start+n/2+2 < gameInfo.get_Key_Number())
-				returnList.add(player.contains(suit, start+n/2+2));
+				returnList.add(player.contains(key_suit_in_array[start+n/2], start+n/2+2));
 			    else
-				returnList.add(player.contains(suit, start+n/2+3));
+				returnList.add(player.contains(key_suit_in_array[start+n/2], start+n/2+3));
 			}
 			player.get_Manager().deactivate_All();
 			return returnList;

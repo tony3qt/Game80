@@ -44,7 +44,7 @@ public class GameRules {
 	    for (int i=1; i<4; i++) {
 		int ID = (player.get_ID() + i)%4;
 		ArrayList<Card> return_Cards = CardStructure.structure_Node_Analyze(cs, player, t, ID, gameInfo) ;
-		if( return_Cards != null) {
+		if( return_Cards!=null) {
 		    cs = new CardStructure(gameInfo, return_Cards);
 		    play_suit_List.clear();
 		    play_number_List.clear();
