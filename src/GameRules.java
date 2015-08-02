@@ -145,7 +145,11 @@ public class GameRules {
 	else
 	    total_in_hand = CardStructure.structure_Analyze(cs, player.get_Manager().get_List(cs.get_Uniform_Suit()), gameInfo);
 
-	assert to_play.size() == total_in_hand.size();
+	if (to_play.size() != total_in_hand.size()) {
+	    System.out.println("Doesn't obey optimal rule");
+	    return false;
+	}
+	    
 	for(int i=0; i<to_play.size(); i++) {
 	    if (to_play.get(i) != total_in_hand.get(i)) {
 		System.out.println("Doesn't obey optimal rule");

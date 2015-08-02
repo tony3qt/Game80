@@ -255,6 +255,7 @@ public class HumanPlayer extends Player {
 		if(number<=14 && number>=2) {
 		    card = contains(Card.Suit.SPADE, number);
 		    if (card != null) {
+			card.activate();
 			table_suit_List.add(Card.Suit.SPADE);
 			table_number_List.add(number);
 		    }
@@ -266,6 +267,7 @@ public class HumanPlayer extends Player {
         	if(number<=14 && number>=2) {
 		    card = contains(Card.Suit.HEART, number);
 		    if (card != null) {
+			card.activate();
 	        	table_suit_List.add(Card.Suit.HEART);
 			table_number_List.add(number);
 		    }
@@ -277,6 +279,7 @@ public class HumanPlayer extends Player {
         	if(number<=14 && number>=2) {
 		    card = contains(Card.Suit.DIAMOND, number);
 		    if (card != null) {
+			card.activate();
 	        	table_suit_List.add(Card.Suit.DIAMOND);
 			table_number_List.add(number);
 		    }
@@ -288,6 +291,7 @@ public class HumanPlayer extends Player {
         	if(number<=14 && number>=2) {
 		    card = contains(Card.Suit.CLUB, number);
 		    if (card != null) {
+			card.activate();
 			table_suit_List.add(Card.Suit.CLUB);
 			table_number_List.add(number);
 		    }
@@ -299,6 +303,7 @@ public class HumanPlayer extends Player {
         	if(number<=14 && number>=2) {
 		    card = contains(Card.Suit.L_JOKER, number);
 		    if (card != null) {
+			card.activate();
 			table_suit_List.add(Card.Suit.L_JOKER);
 			table_number_List.add(number);
 		    }
@@ -310,6 +315,7 @@ public class HumanPlayer extends Player {
         	if(number<=14 && number>=2) {
 		    card = contains(Card.Suit.H_JOKER, number);
 		    if (card != null) {
+			card.activate();
 			table_suit_List.add(Card.Suit.H_JOKER);
 			table_number_List.add(number);
 		    }

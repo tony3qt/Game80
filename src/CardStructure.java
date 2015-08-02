@@ -9,12 +9,12 @@ import java.lang.Comparable;
 public class CardStructure {
 
     Card.Suit uniform_Suit;
-    int[] card_Table;
-    int[] card_Table_Renormalized;
+    private int[] card_Table;
+    private int[] card_Table_Renormalized;
     GameInfo gameInfo;
     int card_Number;
     
-    ArrayList<StructureNode> structure_List;
+    private ArrayList<StructureNode> structure_List;
     
     /**
      * Construct a table(card_Table) of size equals the size of cards'suit, each element is 0, 1 or 2;
@@ -173,6 +173,7 @@ public class CardStructure {
 	}
 	
     }
+    
     private void generateStructure() {
 	structure_List = new ArrayList<StructureNode> ();
 	for (int i=0;i<card_Table_Renormalized.length;i++) {
@@ -184,7 +185,7 @@ public class CardStructure {
 	Collections.sort(structure_List);
 
     }
-
+    
     public Card.Suit get_Uniform_Suit() { return uniform_Suit; }
 
     public int size() { return structure_List.size(); }
@@ -192,10 +193,24 @@ public class CardStructure {
     public int get_Card_Number() { return card_Number; }
 
     private ArrayList<StructureNode> get_Structure_List() { return structure_List; }
-
+    
+    private boolean downcast() {
+	if (structure_List.get(0).type<4) return false;
+	else {
+	    structure_List.get(0).type -= 2;
+	    structure_List.add(new StructureNode(structure_List.get(0).start,2));
+	    structure_List.get(0).start += 1;
+	    Collections.sort(structure_List);
+	    return true;
+	}
+    }
+    
+    
      /**
-     * CardStructure cs could be changed.
-     */
+      * Reorganize the structureNode of cs, to get the same structure as cs_template;
+      * CardStructure cs could be changed.
+      * Eg, cs:(4,3), cs_template:(2,12), (2,14), cs will be (2,3),(2,4) after cast is called.
+      */
     private static boolean cast (CardStructure cs, CardStructure cs_template) {
 
 	assert cs_template.get_Uniform_Suit() != null;
@@ -266,11 +281,13 @@ public class CardStructure {
 	assert cs.get_Uniform_Suit() != null;
 	CardStructure cs_test = new CardStructure(gameInfo, card_List);
 	assert cs_test.get_Uniform_Suit() == cs.get_Uniform_Suit();
-	assert cs.get_Card_Number() <= cs.get_Card_Number();
+	assert cs.get_Card_Number() <= cs_test.get_Card_Number();
 
-	int type1, type2, start2;
+	int type1, type2, start1, start2;
 	int size = cs.get_Structure_List().size();
 	ArrayList<Boolean> structure_Boolean_List = new ArrayList<Boolean>();
+	
+	/*
 	int j = 0;
 	for(int i=0; i<size; i++) {
 	    type1 = cs.get_Structure_List().get(i).type;
@@ -292,11 +309,52 @@ public class CardStructure {
 		Collections.sort(cs.get_Structure_List());
 	    }
 	}
+	*/
 	
-	assert structure_Boolean_List.size() == size;
+	int j = 0;
+	for(int i=0; i<cs.size();) {
+	    type1 = cs.get_Structure_List().get(i).type;
+	    type2 = cs_test.get_Structure_List().get(j).type;
+	    if(type1 > type2) {
+		structure_Boolean_List.add(false);
+		start1 = cs.get_Structure_List().get(i).start;
+		cs.get_Structure_List().get(i).type = type2;
+		cs.get_Structure_List().get(i).start = start1 + (type1-type2)/2;
+		cs.get_Structure_List().remove(i);
+		cs_test.get_Structure_List().remove(j);
+		cs.get_Structure_List().add(new StructureNode(type1-type2,start1));
+		Collections.sort(cs.get_Structure_List());
+		
+	    }
+	    else if(type1 == type2) {
+		structure_Boolean_List.add(true);
+		cs.get_Structure_List().remove(i);
+		cs_test.get_Structure_List().remove(j);
+		
+	    }
+	    else {
+		structure_Boolean_List.add(true);
+		start2 = cs_test.get_Structure_List().get(j).start;
+		cs_test.get_Structure_List().get(j).type = type1;
+		cs_test.get_Structure_List().get(j).start = start2 + (type2-type1)/2;
+		cs_test.get_Structure_List().remove(j);
+		cs.get_Structure_List().remove(i);
+		cs_test.get_Structure_List().add(new StructureNode(type2-type1,start2));
+		Collections.sort(cs_test.get_Structure_List());
+	    }
+	}
+
+	cs.generateStructure();
+	//assert structure_Boolean_List.size() == size;
 	return structure_Boolean_List;
     }
 
+    
+    /**
+     * If the player(ID=ID) has a structureNode, which is larger than that of the index-th strucutreNode of cs, (cs comes from player),
+     * an arrayList of cards containing the index-th structureNode will be returned;
+     * Otherwise, return null.
+     */
     public static ArrayList<Card> structure_Node_Analyze(CardStructure cs, Player player, int index, int ID, GameInfo gameInfo) {
 
 	assert cs.get_Uniform_Suit() != null;
