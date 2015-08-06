@@ -8,11 +8,11 @@ import java.lang.Comparable;
 
 public class CardStructure {
 
-    Card.Suit uniform_Suit;
+    private Card.Suit uniform_Suit;
     private int[] card_Table;
     private int[] card_Table_Renormalized;
-    GameInfo gameInfo;
-    int card_Number;
+    private GameInfo gameInfo;
+    private int card_Number;
     
     private ArrayList<StructureNode> structure_List;
     
@@ -195,7 +195,12 @@ public class CardStructure {
     public int get_Card_Number() { return card_Number; }
 
     public ArrayList<StructureNode> get_Structure_List() { return structure_List; }
-    
+
+    public void add_Structure_Node(int type, int start) {
+	this.get_Structure_List().add(new StructureNode(type,start));
+    }
+
+    public int get_Structure_Node_Type_0() {return structure_List.get(0).type;}
     
      /**
       * Reorganize the structureNode of cs, to get the same structure as cs_template;
@@ -222,7 +227,8 @@ public class CardStructure {
 		while ( type1 > type2 ) {
 		    cs.get_Structure_List().get(i).type = type2;
 		    cs.get_Structure_List().get(i).start = cs.get_Structure_List().get(i).start + (type1-type2)/2;
-		    cs.get_Structure_List().add(new StructureNode(type1-type2,start1));
+		    //cs.get_Structure_List().add(new StructureNode(type1-type2,start1));
+		    cs.add_Structure_Node(type1-type2, start1);
 		    Collections.sort(cs.get_Structure_List());
 		    type1 = cs.get_Structure_List().get(i).type;
 		    start1 = cs.get_Structure_List().get(i).start;
@@ -256,7 +262,10 @@ public class CardStructure {
 	    return -1;
 	}
 	if (CardStructure.cast(cs2, cs_template)) {
-	    return cs1.get_Structure_List().get(0).compareTo(cs2.get_Structure_List().get(0));
+	    if( cs1.get_Structure_List().get(0).compareTo(cs2.get_Structure_List().get(0)) == 0 )
+		return -1;
+	    else
+		return cs1.get_Structure_List().get(0).compareTo(cs2.get_Structure_List().get(0));
 	}
 	else {
 	    return -1;
@@ -315,7 +324,8 @@ public class CardStructure {
 		cs.get_Structure_List().get(i).start = start1 + (type1-type2)/2;
 		cs.get_Structure_List().remove(i);
 		cs_test.get_Structure_List().remove(j);
-		cs.get_Structure_List().add(new StructureNode(type1-type2,start1));
+		//cs.get_Structure_List().add(new StructureNode(type1-type2,start1));
+		cs.add_Structure_Node(type1-type2, start1);
 		Collections.sort(cs.get_Structure_List());
 		
 	    }
@@ -332,7 +342,8 @@ public class CardStructure {
 		cs_test.get_Structure_List().get(j).start = start2 + (type2-type1)/2;
 		cs_test.get_Structure_List().remove(j);
 		cs.get_Structure_List().remove(i);
-		cs_test.get_Structure_List().add(new StructureNode(type2-type1,start2));
+		//cs_test.get_Structure_List().add(new StructureNode(type2-type1,start2));
+		cs_test.add_Structure_Node(type2-type1, start2);
 		Collections.sort(cs_test.get_Structure_List());
 	    }
 	}
@@ -458,7 +469,7 @@ public class CardStructure {
      /**
      * Inner class
      */
-    static class StructureNode implements Comparable<StructureNode> {
+    private class StructureNode implements Comparable<StructureNode> {
 
 	int type;
 	int start;
@@ -469,16 +480,25 @@ public class CardStructure {
 	
 	@Override
 	public int compareTo(StructureNode otherNode) {
+	    //System.out.println(gameInfo.get_Key_Suit());
 	    if (this.type != otherNode.type) {
 		return otherNode.type - this.type;
 	    }
 	    else {
-		if((otherNode.start > 11) && (otherNode.start < 15) && (this.start >11) && (this.start < 15)) {
-		    //System.out.println("Same");
-		    return 0;
+		if((gameInfo.get_Key_Suit() == Card.Suit.H_JOKER || gameInfo.get_Key_Suit() == Card.Suit.L_JOKER) && uniform_Suit == gameInfo.get_Key_Suit()) {
+		    if((otherNode.start > 0) && (otherNode.start < 4) && (this.start >0) && (this.start < 4)) {
+			return 0;
+		    }
+		    else
+			return otherNode.start - this.start;
 		}
-		else
-		    return otherNode.start - this.start;
+		else {
+		    if((otherNode.start > 11) && (otherNode.start < 15) && (this.start >11) && (this.start < 15)) {
+			return 0;
+		    }
+		    else
+			return otherNode.start - this.start;
+		}
 	    }
 	}
 	public void print_StructureNode() {

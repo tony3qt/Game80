@@ -112,7 +112,8 @@ public class Playboard {
 	    System.out.println("Number of Cards Played :" + gameInfo.get_Number_Of_Cards_Played());
 	}
 
-	System.out.println("Total Scores = " + (gameInfo.get_Total_Scores() + gameInfo.get_Table_Scores()*gameInfo.get_Current_Structure().structure_List.get(0).type) );
+	//System.out.println("Total Scores = " + (gameInfo.get_Total_Scores() + gameInfo.get_Table_Scores()*gameInfo.get_Current_Structure().structure_List.get(0).type) );
+	System.out.println("Total Scores = " + (gameInfo.get_Total_Scores() + gameInfo.get_Table_Scores()*gameInfo.get_Current_Structure().get_Structure_Node_Type_0()));
 	
 	
 	Card card1 = new Card(Card.Suit.SPADE,2);

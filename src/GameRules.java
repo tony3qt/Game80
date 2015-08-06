@@ -39,25 +39,32 @@ public class GameRules {
 	player.get_Manager().deactivate_All();
 	
 	CardStructure cs = new CardStructure(gameInfo, play_list);
+	ArrayList<Card> return_Cards;
 
-	for (int t=0; t<cs.size(); t++) {
-	    for (int i=1; i<4; i++) {
-		int ID = (player.get_ID() + i)%4;
-		ArrayList<Card> return_Cards = CardStructure.structure_Node_Analyze(cs, player, t, ID, gameInfo) ;
-		if( return_Cards!=null) {
-		    cs = new CardStructure(gameInfo, return_Cards);
-		    play_suit_List.clear();
-		    play_number_List.clear();
-		    for (Card c : return_Cards) {
-			play_suit_List.add(c.suit());
-			play_number_List.add(c.number());
+	if (cs.get_Uniform_Suit() != null) {
+
+	    if (cs.size() >=2 ) {
+	    for (int t=0; t<cs.size(); t++) {
+		for (int i=1; i<4; i++) {
+		    int ID = (player.get_ID() + i)%4;
+		    return_Cards = CardStructure.structure_Node_Analyze(cs, player, t, ID, gameInfo) ;
+		    if( return_Cards != null) {
+			cs = new CardStructure(gameInfo, return_Cards);
+			play_suit_List.clear();
+			play_number_List.clear();
+			for (Card c : return_Cards) {
+			    play_suit_List.add(c.suit());
+			    play_number_List.add(c.number());
+			}
+			break;
 		    }
-		    break;
+		    if( return_Cards != null) {
+			break;
+		    }
 		}
 	    }
-	}
+	    }
 	
-	if (cs.get_Uniform_Suit() != null) {
 	    gameInfo.update_Current_Structure(cs);
 	    player.update_Play_Structure(cs);
 	    return true;

@@ -247,6 +247,8 @@ public class HumanPlayer extends Player {
 	char char_suit;
 	int number;
 	
+	manager.deactivate_All();
+	
 	while (!command.equals("")) {
 	    char_suit = command.charAt(0);
 	    try {
