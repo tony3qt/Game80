@@ -235,7 +235,7 @@ public class HumanPlayer extends Player {
      * Remve and return true if cards are valid, return false otherwise.
      */
     @Override
-    public boolean player_set_Table_Card() {
+    public boolean playerSetTableCard() {
 	ArrayList<Card.Suit> table_suit_List = new ArrayList<Card.Suit>();
 	ArrayList<Integer> table_number_List = new ArrayList<Integer>();
 	

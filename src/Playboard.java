@@ -24,13 +24,13 @@ public class Playboard {
 	    
 	}
     }
-    public static void get_Table_Card() {
+    public static void getTableCard() {
 	gameInfo.update_IronThrone();
-	players[gameInfo.get_IronThrone()].player_get_Table_Card();
+	players[gameInfo.get_IronThrone()].playerGetTableCard();
     }
 
-    public static void set_Table_Card() {
-	while(!players[gameInfo.get_IronThrone()].player_set_Table_Card()) {}
+    public static void setTableCard() {
+	while(!players[gameInfo.get_IronThrone()].playerSetTableCard()) {}
 	players[gameInfo.get_IronThrone()].printOutCard_in_Order();
 	
     }
@@ -60,14 +60,14 @@ public class Playboard {
 
 	
 	distribute_Cards();
-	get_Table_Card();
+	getTableCard();
 	
 	
 	gameInfo.printOutGameInfo();
 	for(int p=0;p<NPlayer;p++) {
 	    players[p].sortCard();
 	}
-	set_Table_Card();
+	setTableCard();
 
 	int starter_ID = gameInfo.get_IronThrone();
 	int max_ID;

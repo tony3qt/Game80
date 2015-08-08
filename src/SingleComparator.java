@@ -1,6 +1,11 @@
 
 import java.util.Comparator;
 
+/**
+ * SingleComparator is only used for the purpose to put all the cards in order based on a universal rule.
+ * It is not involved in card comparison.
+ * The two cards being compared either have the same suit, or both are key suit.
+ */
 public class SingleComparator implements Comparator<Card> {
 
     GameInfo gameInfo;

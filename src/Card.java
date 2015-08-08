@@ -27,7 +27,7 @@ public class Card {
 	    return null;
 	}
 	
-	 @Override
+	@Override
 	public String toString() {
 	    switch(this) {
 	    case SPADE: return "\u2660" ;
