@@ -10,20 +10,20 @@ import java.util.Collections;
 public class CardManager {
 
     /* Counts four suits and key cards, not used now */
-    int[] spade_Cards;
-    int[] heart_Cards;
-    int[] diamond_Cards;
-    int[] club_Cards;
-    int[] key_Cards;
+    protected int[] spade_Cards;
+    protected int[] heart_Cards;
+    protected int[] diamond_Cards;
+    protected int[] club_Cards;
+    protected int[] key_Cards;
 
     /* Classify all cards into five groups, it's very likely that one of them is empty */
-    ArrayList<Card> spade_List;
-    ArrayList<Card> heart_List;
-    ArrayList<Card> diamond_List;
-    ArrayList<Card> club_List;
-    ArrayList<Card> key_List;
+    protected ArrayList<Card> spade_List;
+    protected ArrayList<Card> heart_List;
+    protected ArrayList<Card> diamond_List;
+    protected ArrayList<Card> club_List;
+    protected ArrayList<Card> key_List;
 
-    GameInfo gameInfo;
+    protected GameInfo gameInfo;
     
     /** 
      * Constructor;

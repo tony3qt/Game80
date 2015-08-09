@@ -14,6 +14,7 @@ public class CardStructure {
     private GameInfo gameInfo;
     private int card_Number;
     
+    private ArrayList<Card> cards;
     private ArrayList<StructureNode> structure_List;
     
     /**
@@ -23,15 +24,18 @@ public class CardStructure {
      */
     public CardStructure(GameInfo gameInfo, ArrayList<Card> args) {
 	this.gameInfo = gameInfo;
+	this.cards = args;
+	card_Number = args.size();
+	
 	uniform_Suit = null;
 	card_Table = new int[0];
- 
+	
 	if (args != null && args.size() != 0 && testSuit(args)) {
 	    if (uniform_Suit == gameInfo.get_Key_Suit()) {
 		if(gameInfo.get_Key_Suit() != Card.Suit.H_JOKER && gameInfo.get_Key_Suit() != Card.Suit.L_JOKER ) {
+		    
 		    card_Table = new int[gameInfo.CARD_IN_EACH_SUIT-1 + 4 + 2];
 		    for (Card card : args) {
-			card_Number ++;
 			if (card.getNumber() < gameInfo.get_Key_Number() && card.getSuit() != Card.Suit.H_JOKER && card.getSuit() != Card.Suit.L_JOKER)
 			    card_Table[card.getNumber()-2] ++;
 			else if (card.getNumber() > gameInfo.get_Key_Number() && card.getSuit() != Card.Suit.H_JOKER && card.getSuit() != Card.Suit.L_JOKER)
@@ -46,11 +50,12 @@ public class CardStructure {
 			else if (card.getSuit() == Card.Suit.H_JOKER)
 			    card_Table[gameInfo.CARD_IN_EACH_SUIT+4] ++ ;
 		    }
+		    
 		}
+		
 		else {
 		    card_Table = new int[6];
 		    for (Card card: args) {
-			card_Number ++;
 			if (card.getNumber() == gameInfo.get_Key_Number()) 
 			    card_Table[card.getSuit().getValue()] ++ ;
 			else if (card.getSuit() == Card.Suit.L_JOKER)
@@ -59,6 +64,7 @@ public class CardStructure {
 			    card_Table[5] ++ ;
 		    }
 		}
+		
 		
 	    }
 	    else {
@@ -201,6 +207,23 @@ public class CardStructure {
     }
 
     public int get_Structure_Node_Type_0() {return structure_List.get(0).type;}
+
+    /* This function will be used in Computerplayer.Strategymanager. */
+    public int get_Structure_Node_Type(int n) {
+	assert n < this.size();
+	return structure_List.get(n).type;
+    }
+    /* This function will be used in Computerplayer.Strategymanager. */
+    public int get_Structure_Node_Start(int n) {
+	assert n < this.size();
+	return structure_List.get(n).start;
+    }
+
+    public ArrayList<Card> get_Cards() {
+	return cards;
+    }
+    
+    
     
      /**
       * Reorganize the structureNode of cs, to get the same structure as cs_template;

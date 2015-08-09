@@ -3,7 +3,7 @@ public class ComputerPlayer extends Player{
     public ComputerPlayer( GameInfo gameInfo, int playerID, Shuffle shuffleGenerator ) {
 	super( gameInfo, playerID, shuffleGenerator );
     }
-	@Override
+    @Override
     public void getOneCard() {
 	cardpack[current_Card_Number] =
 	    shuffleGenerator.allCards[current_Card_Number*NPlayer + playerID];
@@ -62,5 +62,40 @@ public class ComputerPlayer extends Player{
 	}
 	current_Card_Number++;
     }
-   
+
+    
+    @Override
+    public boolean playCards(boolean starter) {
+
+	return true;
+    }
+
+
+    @Override
+    public boolean playerSetTableCard() {
+
+	return true;
+    }
+
+
+
+    /**
+     * Inner class
+     */
+    private class StrategyManager extends CardManager {
+
+	private CardStructure spade_Structure, heart_Structure, diamond_Structure, club_Structure;
+	private CardStructure key_Structure;
+
+	public StrategyManager(Card[] cardpack,Card[] table_Cards, GameInfo gameInfo) {
+	    super(cardpack, table_Cards, gameInfo);
+	    spade_Structure = new CardStructure(gameInfo, spade_List);
+	    heart_Structure = new CardStructure(gameInfo, heart_List);
+	    diamond_Structure = new CardStructure(gameInfo, heart_List);
+	    club_Structure = new CardStructure(gameInfo, club_List);
+	    key_Structure = new CardStructure(gameInfo, key_List);
+	}
+	    
+	void setTableCard() {}
+    }
 }
