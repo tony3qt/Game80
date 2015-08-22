@@ -31,12 +31,13 @@ public class CardManager {
      * If the player owns the table cards, then table_Cards is not empty, otherwise table_Cards is empty.
      */
     public CardManager(Card[] cardpack,Card[] table_Cards, GameInfo gameInfo) {
+	/*
 	spade_Cards = new int[13];
 	heart_Cards = new int[13];
 	diamond_Cards = new int[13];
 	club_Cards = new int[13];
 	key_Cards = new int[6];
-
+	*/
 	this.gameInfo = gameInfo;
 
 	spade_List = new ArrayList<Card>();

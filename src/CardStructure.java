@@ -92,6 +92,20 @@ public class CardStructure {
     }
 
     /**
+     * Constructor ( used in History)
+     */
+    public CardStructure(GameInfo gameInfo, Card.Suit suit, int[] card_Table) {
+	this.gameInfo = gameInfo;
+	this.card_Table = card_Table;
+	this.uniform_Suit = suit;
+	card_Number = 0;
+	for (int i=0; i<card_Table.length; i++) { card_Number += card_Table[i]; }
+	renormalize();
+	generateStructure();
+    }
+
+	
+    /**
      * Test whether the cards have the same suit;
      */
     public boolean testSuit(ArrayList<Card> args) {

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 /** 
  * Player controls its onwn cards and makes decision on how to play in the game; 
@@ -25,14 +26,16 @@ public abstract class Player {
     protected int current_Card_Number;
 
     protected CardStructure play_Structure;
-
+    protected History history;
+    
     /** 
      * Player gets cards from shuffleGenerator, an instance of Shuffle class,
      * which has a sequence of shuffled cards;
      * Each Player has its own ID.
      */
-    public Player(GameInfo gameInfo, int playerID, Shuffle shuffleGenerator) {
+    public Player(GameInfo gameInfo, int playerID, Shuffle shuffleGenerator, History history) {
 	this.gameInfo = gameInfo;
+	this.history = history;
 	this.playerID = playerID;
 	this.keyNumber = gameInfo.get_Key_Number();
 	this.NPlayer = gameInfo.NPlayer;
@@ -117,5 +120,9 @@ public abstract class Player {
     }
     public CardStructure get_Play_Structure() {
 	return play_Structure;
+    }
+
+    protected ArrayList<Card> my_Card_List(Card.Suit suit) {
+	return manager.get_List(suit);
     }
 }

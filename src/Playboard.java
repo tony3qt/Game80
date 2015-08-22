@@ -6,7 +6,7 @@ public class Playboard {
     public static Player[] players;
     public static GameInfo gameInfo;
     public static Shuffle shuffleGenerator;
-
+    public static History history;
 
     public static void shuffle_Cards() {
 	shuffleGenerator = new Shuffle(gameInfo);
@@ -49,13 +49,13 @@ public class Playboard {
 	gameInfo = new GameInfo(NPlayer,NPackage,keyNumber,debug);
 	players = new Player[NPlayer];
 	gameInfo.players = players;
-	
+	history = new History(gameInfo);
 
 	shuffle_Cards();
 
 	
 	for(int p=0;p<gameInfo.NPlayer;p++) {
-	    players[p] = new HumanPlayer(gameInfo, p, shuffleGenerator);
+	    players[p] = new HumanPlayer(gameInfo, p, shuffleGenerator, history);
 	}
 
 	
@@ -70,7 +70,7 @@ public class Playboard {
 	setTableCard();
 
 	int starter_ID = gameInfo.get_IronThrone();
-	int max_ID;
+	int max_ID = starter_ID;
 
 	while(gameInfo.get_Number_Of_Cards_Played() < (gameInfo.CARD_IN_EACH_PACKAGE-4)*gameInfo.NPackage/gameInfo.NPlayer ) {
 
@@ -78,9 +78,13 @@ public class Playboard {
 
 	    players[starter_ID].printOutCard_in_Order();
 	    while(!players[starter_ID].playCards(true));
+	    history.update_History(starter_ID, players[starter_ID].get_Play_Structure(), 0, max_ID);
+	    
 
 	    players[(starter_ID+1)%4].printOutCard_in_Order();
 	    while(!players[(starter_ID+1)%4].playCards(false));
+	    history.update_History((starter_ID+1)%4, players[(starter_ID+1)%4].get_Play_Structure(), 1, max_ID);
+	    
 	    
 	    if (CardStructure.compare(players[starter_ID].get_Play_Structure(), players[(starter_ID+1)%4].get_Play_Structure(), gameInfo) > 0) {
 		max_ID = (starter_ID + 1)%4; System.out.println(max_ID); }
@@ -88,7 +92,8 @@ public class Playboard {
 	    
 	    
 	    players[(starter_ID+2)%4].printOutCard_in_Order();
-	    while(!players[(starter_ID+2)%4].playCards(false));	   
+	    while(!players[(starter_ID+2)%4].playCards(false));
+	    history.update_History((starter_ID+2)%4, players[(starter_ID+2)%4].get_Play_Structure(), 2, max_ID);
 	    
 	    if (CardStructure.compare(players[max_ID].get_Play_Structure(),
 					    players[(starter_ID+2)%4].get_Play_Structure(), gameInfo.get_Current_Structure(), gameInfo) > 0) {
@@ -98,6 +103,7 @@ public class Playboard {
 	    
 	    players[(starter_ID+3)%4].printOutCard_in_Order();
 	    while(!players[(starter_ID+3)%4].playCards(false));
+	    history.update_History((starter_ID+3)%4, players[(starter_ID+3)%4].get_Play_Structure(), 3, max_ID);
 	    
 	    if (CardStructure.compare(players[max_ID].get_Play_Structure(),
 					    players[(starter_ID+3)%4].get_Play_Structure(), gameInfo.get_Current_Structure(), gameInfo) > 0) {

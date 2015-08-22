@@ -11,8 +11,8 @@ import java.lang.NumberFormatException;
 
 public class HumanPlayer extends Player {
 
-    public HumanPlayer(GameInfo gameInfo, int playerID, Shuffle shuffleGenerator) {
-	super(gameInfo, playerID, shuffleGenerator);
+    public HumanPlayer(GameInfo gameInfo, int playerID, Shuffle shuffleGenerator, History history) {
+	super(gameInfo, playerID, shuffleGenerator, history);
     }
 
 
@@ -188,6 +188,9 @@ public class HumanPlayer extends Player {
 		else {
 		    gameInfo.update_Current_Suit(play_suit_List.get(0));
 		}
+
+		System.out.println(history.win_Prob(gameInfo.get_Current_Suit(), play_Structure.get_Structure_Node_Type(0),
+						    play_Structure.get_Structure_Node_Start(0), my_Card_List(gameInfo.get_Current_Suit())));
 		return true;
 	    }
 	    else { return false; }

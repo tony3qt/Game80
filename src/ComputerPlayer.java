@@ -1,7 +1,7 @@
 public class ComputerPlayer extends Player{
 
-    public ComputerPlayer( GameInfo gameInfo, int playerID, Shuffle shuffleGenerator ) {
-	super( gameInfo, playerID, shuffleGenerator );
+    public ComputerPlayer( GameInfo gameInfo, int playerID, Shuffle shuffleGenerator, History history ) {
+	super( gameInfo, playerID, shuffleGenerator, history);
     }
     @Override
     public void getOneCard() {
@@ -66,7 +66,7 @@ public class ComputerPlayer extends Player{
     
     @Override
     public boolean playCards(boolean starter) {
-
+	
 	return true;
     }
 
