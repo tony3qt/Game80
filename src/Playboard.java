@@ -77,12 +77,13 @@ public class Playboard {
 	    gameInfo.clear_Current_Scores();
 
 	    players[starter_ID].printOutCard_in_Order();
-	    while(!players[starter_ID].playCards(true));
+	    players[starter_ID].give_Suggestion(0);
+	    while(!players[starter_ID].playCards(0));
 	    history.update_History(starter_ID, players[starter_ID].get_Play_Structure(), 0, max_ID);
 	    
 
 	    players[(starter_ID+1)%4].printOutCard_in_Order();
-	    while(!players[(starter_ID+1)%4].playCards(false));
+	    while(!players[(starter_ID+1)%4].playCards(1));
 	    history.update_History((starter_ID+1)%4, players[(starter_ID+1)%4].get_Play_Structure(), 1, max_ID);
 	    
 	    
@@ -92,7 +93,7 @@ public class Playboard {
 	    
 	    
 	    players[(starter_ID+2)%4].printOutCard_in_Order();
-	    while(!players[(starter_ID+2)%4].playCards(false));
+	    while(!players[(starter_ID+2)%4].playCards(2));
 	    history.update_History((starter_ID+2)%4, players[(starter_ID+2)%4].get_Play_Structure(), 2, max_ID);
 	    
 	    if (CardStructure.compare(players[max_ID].get_Play_Structure(),
@@ -102,7 +103,7 @@ public class Playboard {
 
 	    
 	    players[(starter_ID+3)%4].printOutCard_in_Order();
-	    while(!players[(starter_ID+3)%4].playCards(false));
+	    while(!players[(starter_ID+3)%4].playCards(3));
 	    history.update_History((starter_ID+3)%4, players[(starter_ID+3)%4].get_Play_Structure(), 3, max_ID);
 	    
 	    if (CardStructure.compare(players[max_ID].get_Play_Structure(),

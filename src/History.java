@@ -296,7 +296,7 @@ public class History {
 
 	double prob = 0.0;
 	if (type == 1 && counts >0) prob = 0.0;
-	else if (type == 1 && counts == 0) prob = 1.0 * get_Prob_Product(suit);
+	else if (type == 1 && counts == 0) prob = 1.0;
 	else if (type == 2) prob = 1.0*(6-counts)/6;
 	else prob = 1.0;
 	return prob;

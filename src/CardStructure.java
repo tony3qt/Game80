@@ -25,12 +25,13 @@ public class CardStructure {
     public CardStructure(GameInfo gameInfo, ArrayList<Card> args) {
 	this.gameInfo = gameInfo;
 	this.cards = args;
-	card_Number = args.size();
+	
 	
 	uniform_Suit = null;
 	card_Table = new int[0];
 	
 	if (args != null && args.size() != 0 && testSuit(args)) {
+	    card_Number = args.size();
 	    if (uniform_Suit == gameInfo.get_Key_Suit()) {
 		if(gameInfo.get_Key_Suit() != Card.Suit.H_JOKER && gameInfo.get_Key_Suit() != Card.Suit.L_JOKER ) {
 		    
@@ -81,6 +82,7 @@ public class CardStructure {
 	}
     
 	else {
+	    card_Number = 0;
 	    uniform_Suit = null;
 	    card_Table_Renormalized = new int[0];
 	    structure_List = new ArrayList<StructureNode>();

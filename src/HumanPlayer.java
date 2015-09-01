@@ -93,7 +93,7 @@ public class HumanPlayer extends Player {
      * Remve and return true if cards are valid, return false otherwise.
      */
     @Override
-    public boolean playCards(boolean starter) {
+    public boolean playCards(int starter) {
 	
 	ArrayList<Card.Suit> play_suit_List = new ArrayList<Card.Suit>();
 	ArrayList<Integer> play_number_List = new ArrayList<Integer>();
@@ -165,7 +165,7 @@ public class HumanPlayer extends Player {
 
 	manager.deactivate_All();
 	
-	if(starter) {
+	if(starter==0) {
 
 	    if (GameRules.test(this, play_suit_List, play_number_List, gameInfo)) {
 		manager.deactivate_All();

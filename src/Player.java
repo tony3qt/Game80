@@ -84,7 +84,7 @@ public abstract class Player {
 
     public abstract boolean playerSetTableCard();
     
-    public abstract boolean playCards(boolean starter) ;
+    public abstract boolean playCards(int starter) ;
 
     /** 
      * Test whether player has a card;
@@ -124,5 +124,41 @@ public abstract class Player {
 
     protected ArrayList<Card> my_Card_List(Card.Suit suit) {
 	return manager.get_List(suit);
+    }
+
+    public void give_Suggestion(int starter) {
+	CardStructure suit_cs;
+	Card.Suit suit;
+	int start;
+	int type;
+	if(starter==0) {
+	    for(int i=0; i<4; i++) {
+		suit = Card.Suit.getSuit(i);
+		if(suit != gameInfo.get_Key_Suit()) {
+		    suit_cs = new CardStructure(gameInfo, my_Card_List(suit));
+		    for(int j=0; j<suit_cs.size(); j++) {
+			start = suit_cs.get_Structure_Node_Start(j);
+			type = suit_cs.get_Structure_Node_Type(j);
+			if(history.win_Prob(suit, type, start, my_Card_List(suit))>0.99) {
+			    System.out.println("Suggestion: " + suit + "type: " + type + "start:" + start);
+			}
+		    }
+		}
+	    }
+	    for(int i=0; i<4; i++) {
+		suit = Card.Suit.getSuit(i);
+		if(suit != gameInfo.get_Key_Suit()) {
+		    suit_cs = new CardStructure(gameInfo, my_Card_List(suit));
+		    for(int j=0; j<suit_cs.size(); j++) {
+			start = suit_cs.get_Structure_Node_Start(j);
+			type = suit_cs.get_Structure_Node_Type(j);
+			if(type>=2 && history.win_Prob(suit, type, start, my_Card_List(suit))<0.99 &&
+			   history.win_Prob(suit, type, start, my_Card_List(suit))>0.6) {
+			    System.out.println("Suggestion: " + suit + " type: " + type + " start:" + start);
+			}
+		    }
+		}
+	    }
+	}
     }
 }
