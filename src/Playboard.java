@@ -77,7 +77,7 @@ public class Playboard {
 	    gameInfo.clear_Current_Scores();
 
 	    players[starter_ID].printOutCard_in_Order();
-	    players[starter_ID].give_Suggestion(0);
+	    players[starter_ID].give_Suggestion(0,starter_ID);
 	    while(!players[starter_ID].playCards(0));
 	    history.update_History(starter_ID, players[starter_ID].get_Play_Structure(), 0, max_ID);
 	    
@@ -103,6 +103,7 @@ public class Playboard {
 
 	    
 	    players[(starter_ID+3)%4].printOutCard_in_Order();
+	    players[(starter_ID+3)%4].give_Suggestion(3, max_ID);
 	    while(!players[(starter_ID+3)%4].playCards(3));
 	    history.update_History((starter_ID+3)%4, players[(starter_ID+3)%4].get_Play_Structure(), 3, max_ID);
 	    

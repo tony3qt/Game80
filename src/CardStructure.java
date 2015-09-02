@@ -239,7 +239,23 @@ public class CardStructure {
 	return cards;
     }
     
-    
+    public int get_Type_Counts(int n) {
+	if( n!=1 && n%2!=0) {
+	    System.out.println("Error in get_Type_Counts, CardStructure");
+	}
+	int counts = 0;
+	for(int i=0; i<this.size(); i++) {
+	    if (structure_List.get(i).type == n) {
+		counts++;
+	    }
+	}
+	return counts;
+    }
+
+    public void change_Node(int n, int type, int start) {
+	structure_List.get(n).type = type;
+	structure_List.get(n).start = start;
+    }
     
      /**
       * Reorganize the structureNode of cs, to get the same structure as cs_template;
@@ -314,7 +330,7 @@ public class CardStructure {
     
     /**
      * Return a ArrayList of Boolean. 
-     * Each boolean indicates whether there coulbe be a same structureNode in card_List.
+     * Each boolean indicates whether there could be a same structureNode in card_List.
      * cs could be modified in the process, but cs.generatestructure() restore it back.
      * This function will be used in GameRules.check_Optimal_Rule.
      */
