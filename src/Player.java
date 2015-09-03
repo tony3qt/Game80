@@ -182,7 +182,7 @@ public abstract class Player {
 			    while(index2 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index2)>=type) { index2++; }
 			    //System.out.println("index2 = " + index2);
 			
-			    for (int k=index1; k<index2; k++) {
+			    for (int k=index2-1; k>=index1; k--) {
 				if (index_to_number(suit_cs.get_Structure_Node_Start(k))==10) {
 				    System.out.println("Suggestion: type" + type + " " + suit + 10);
 				    pass = true;
@@ -213,7 +213,7 @@ public abstract class Player {
 			}
 			else if (suit_cs.get_Structure_Node_Type(0) < type) {
 			    int target=0;
-			    for(int k=0; k<suit_cs.size(); k++) {
+			    for(int k=suit_cs.size(); k>=0; k--) {
 				if (index_to_number(suit_cs.get_Structure_Node_Start(k))==10) {
 				    System.out.println("Suggestion: type1" + " " + suit + 10);
 				    pass = true;
@@ -282,7 +282,7 @@ public abstract class Player {
 				    while(index1 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index1)>2) { index1++; }
 				    while(index2 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index2)>=2) { index2++; }
 				    if (i<gameInfo.get_Current_Structure().size()-1) {
-					for (int k=index1; k<index2; k++) {
+					for (int k=index2-1; k>=index1; k--) {
 					    if (index_to_number(suit_cs.get_Structure_Node_Start(k))==10) {
 						System.out.println("Suggestion: type1 " + suit + 10);
 						pass = true;
@@ -317,6 +317,7 @@ public abstract class Player {
 					}
 				    }
 				    else {
+					///////////////********************////////////// need to be modified
 					System.out.println("Suggestion: type1 " + suit + index_to_number(suit_cs.get_Structure_Node_Start(index2-1)));
 					pass = true;
 					suit_cs.change_Node(index2-1,1,suit_cs.get_Structure_Node_Start(index2-1));
@@ -324,15 +325,66 @@ public abstract class Player {
 				    }
 				}
 				else {
-				    
+				    ////////////******************/////////////// 
 				}
 			    }
 			} 
 		    }
 		}
 		else if ((winner_ID-playerID)%2!=0 && gameInfo.get_Current_Structure().get_Structure_Node_Type(0)<=2) {
-		    
-		    
+		    if (gameInfo.get_Current_Structure().size()>1) {
+			/* Impossible to win in this case */
+		    }
+		    else {
+		        type = gameInfo.players[winner_ID].get_Play_Structure().get_Structure_Node_Type(0);
+			start = gameInfo.players[winner_ID].get_Play_Structure().get_Structure_Node_Start(0);
+			counts = suit_cs.get_Type_Counts(type);
+			index1 = 0;
+			index2 = 0;
+			pass = false;
+			if (counts>0) {
+			    while(index1 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index1)>type) { index1++; }
+			    System.out.println("index1 = " + index1);
+			    while(index2 < suit_cs.size() && (suit_cs.get_Structure_Node_Type(index2)>type ||
+							      suit_cs.get_Structure_Node_Type(index2)==type && suit_cs.get_Structure_Node_Start(index2)>start)) { index2++; }
+			    System.out.println("index2 = " + index2);
+			
+			    for (int k=index2-1; k>=index1; k--) {
+				if (index_to_number(suit_cs.get_Structure_Node_Start(k))==10) {
+				    System.out.println("Suggestion: type" + type + " " + suit + 10);
+				    pass = true;
+				    suit_cs.get_Structure_List().remove(k);
+				    break;
+				}
+				if (index_to_number(suit_cs.get_Structure_Node_Start(k))==13) {
+				    System.out.println("Suggestion: type" + type + " " + suit + 13);
+				    pass = true;
+				    suit_cs.get_Structure_List().remove(k);
+				    break;
+				}
+			    }
+			    if (!pass) {
+				for(int k=index1; k<index2; k++) {
+				    if (index_to_number(suit_cs.get_Structure_Node_Start(k))==5) {
+					System.out.println("Suggestion: type" + type + " " + suit + 5);
+					pass = true;
+					suit_cs.get_Structure_List().remove(k);
+					break;
+				    }
+				}
+			    }
+			    if (!pass && index2-index1>0) {
+				System.out.println("Suggestion: type" + type + " " + suit + index_to_number(suit_cs.get_Structure_Node_Start(index2-1)));
+				suit_cs.get_Structure_List().remove(index2-1);
+				pass = true;
+			    }
+			    if (!pass) {
+				while(index2 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index2)>=type) { index2++; }
+				System.out.println("Suggestion: type" + type + " " + suit + index_to_number(suit_cs.get_Structure_Node_Start(index2-1)));
+				suit_cs.get_Structure_List().remove(index2-1);
+			    }
+ 			}
+		    }
 		}
 	    }
 	}

@@ -491,6 +491,7 @@ public class CardStructure {
 		else if (type == type_test) {
 		    if (cs.get_Structure_List().get(index).compareTo(cs_test.get_Structure_List().get(j)) <=0 ) { return null; }
 		    else {
+			player.get_Manager().deactivate_All();	
 			for (int n=0; n<type; n++) {
 			    if(start+n/2+2 < gameInfo.get_Key_Number())
 				returnList.add(player.contains(suit, start+n/2+2));
