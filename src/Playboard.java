@@ -67,7 +67,7 @@ public class Playboard {
 	for(int p=0;p<NPlayer;p++) {
 	    players[p].sortCard();
 	}
-	setTableCard();
+	//setTableCard();
 
 	int starter_ID = gameInfo.get_IronThrone();
 	int max_ID = starter_ID;

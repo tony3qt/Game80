@@ -198,7 +198,7 @@ public class CardStructure {
 	
     }
     
-    private void generateStructure() {
+    public void generateStructure() {
 	structure_List = new ArrayList<StructureNode> ();
 	for (int i=0;i<card_Table_Renormalized.length;i++) {
 	    if(card_Table_Renormalized[i]!=0)
@@ -255,6 +255,9 @@ public class CardStructure {
     public void change_Node(int n, int type, int start) {
 	structure_List.get(n).type = type;
 	structure_List.get(n).start = start;
+    }
+    public void add_Node(int type, int start) {
+	structure_List.add(new StructureNode(type, start));
     }
     
      /**

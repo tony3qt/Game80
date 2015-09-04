@@ -51,7 +51,7 @@ public abstract class Player {
     }
     
     public void printID() {
-	System.out.print("Player " + playerID);
+   	System.out.print("Player " + playerID);
     }
 
     /** 
@@ -172,21 +172,44 @@ public abstract class Player {
 		System.out.println("Suggestion: all in " + suit);
 	    }
 	    if (gameInfo.get_Current_Counts() < my_Card_List(suit).size()) {
-		if ((winner_ID-playerID)%2==0 && gameInfo.get_Current_Structure().get_Structure_Node_Type(0)<=2) {
+		if ((winner_ID-playerID)%2==0) { // && gameInfo.get_Current_Structure().get_Structure_Node_Type(0)<=2) {
+
+		    
 		    for(int i=0; i<gameInfo.get_Current_Structure().size(); i++) {
 			pass = false;
 			type = gameInfo.get_Current_Structure().get_Structure_Node_Type(i);
-
+			start = gameInfo.get_Current_Structure().get_Structure_Node_Start(i);
 			counts = suit_cs.get_Type_Counts(type);
 			index1 = 0;
 			index2 = 0;
-		  
+
+			if (type>=4) {
+			    if(counts>0) {
+				while(index1 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index1)>type) { index1++; }
+				while(index2 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index2)>=type) { index2++; }
+				suit_cs.get_Structure_List().remove(index2-1);
+				System.out.println("Suggestion: type" + type + " " + suit + " start " + suit_cs.get_Structure_Node_Start(index2-1));
+				continue;
+			    }
+			    if(counts<0 && suit_cs.get_Structure_Node_Type(0)<type) {
+				gameInfo.get_Current_Structure().change_Node(i, type-2, start+1);
+				gameInfo.get_Current_Structure().add_Node(2,start);
+				Collections.sort(gameInfo.get_Current_Structure().get_Structure_List());
+				i--;
+				continue;
+			    }
+			    if(counts<0 && suit_cs.get_Structure_Node_Type(0)>type) {
+				suit_cs.change_Node(0,suit_cs.get_Structure_Node_Type(0)-type, suit_cs.get_Structure_Node_Start(0)+type/2);
+				Collections.sort(suit_cs.get_Structure_List());
+				continue;
+			    }
+			}
+
+			
 			if (counts>0) {
 			    ///******************************  Single 10, single 13  **************************************///
 			    while(index1 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index1)>type) { index1++; }
-			    //System.out.println("index1 = " + index1);
 			    while(index2 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index2)>=type) { index2++; }
-			    //System.out.println("index2 = " + index2);
 			
 			    for (int k=index2-1; k>=index1; k--) {
 				if (index_to_number(suit_cs.get_Structure_Node_Start(k))==10) {
@@ -367,31 +390,262 @@ public abstract class Player {
 					}
 				    }
 				    else {
-					///////////////*********** Need to be modified *********////////////// 
+					for (int k=index2-1; k>=index1; k--) {
+					    if (index_to_number(suit_cs.get_Structure_Node_Start(k))!=10
+						&& index_to_number(suit_cs.get_Structure_Node_Start(k))!=13
+						&& index_to_number(suit_cs.get_Structure_Node_Start(k))!=5) {
+						System.out.println("Suggestion: type1 " + suit + index_to_number(suit_cs.get_Structure_Node_Start(k)));
+						pass = true;
+						suit_cs.change_Node(k,1,suit_cs.get_Structure_Node_Start(k));
+						Collections.sort(suit_cs.get_Structure_List());
+						break;
+					    }
+					}
+					if(!pass) {
+					    System.out.println("Suggestion: type1 " + suit + index_to_number(suit_cs.get_Structure_Node_Start(index2-1)));
+					    pass = true;
+					    suit_cs.change_Node(index2-1,1,suit_cs.get_Structure_Node_Start(index2-1));
+					    Collections.sort(suit_cs.get_Structure_List());
+					}
+				    }
+				}
+				else {
+				    //////////////////****** Something added here *****/////////////////
+				    int type0 = suit_cs.get_Structure_Node_Type(0);
+				    int start0 = suit_cs.get_Structure_Node_Start(0);
+				    suit_cs.get_Structure_List().remove(0);
+				    for(int s=0; s<type0/2; s++) {
+					suit_cs.add_Node(2,start0+s);
+				    }
+				    Collections.sort(suit_cs.get_Structure_List());
+				    i--;
+				}
+			    }
+			} 
+		    }
+		}
+		else if ((winner_ID-playerID)%2!=0) {
+		    if (gameInfo.get_Current_Structure().size()==1 && gameInfo.players[winner_ID].get_Play_Structure().get_Uniform_Suit()!=gameInfo.get_Key_Suit()) {
+			/* Possible to win */
+		        type = gameInfo.players[winner_ID].get_Play_Structure().get_Structure_Node_Type(0);
+			start = gameInfo.players[winner_ID].get_Play_Structure().get_Structure_Node_Start(0);
+			counts = suit_cs.get_Type_Counts(type);
+			index1 = 0;
+			index2 = 0;
+			pass = false;
+
+			if (type>=4) {
+			    if(counts>0) {
+				while(index1 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index1)>type) { index1++; }
+				while(index2 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index2)>=type) { index2++; }
+				suit_cs.get_Structure_List().remove(index2-1);
+				System.out.println("Suggestion: type" + type + " " + suit + " start " + suit_cs.get_Structure_Node_Start(index2-1));
+				pass = true;
+			    }
+			    if(counts==0 && suit_cs.get_Structure_Node_Type(0)<type) {
+				gameInfo.get_Current_Structure().change_Node(0, type-2, start+1);
+				gameInfo.get_Current_Structure().add_Node(2,start);
+				Collections.sort(gameInfo.get_Current_Structure().get_Structure_List());
+				pass = true;
+				
+			    }
+			    if(counts==0 && suit_cs.get_Structure_Node_Type(0)>type) {
+				suit_cs.change_Node(0,suit_cs.get_Structure_Node_Type(0)-type, suit_cs.get_Structure_Node_Start(0)+type/2);
+				Collections.sort(suit_cs.get_Structure_List());
+				pass = true;
+			    }
+			}
+
+			
+			
+			if (!pass && counts>0) {
+			    /* Has the possibility to win in this case, need to check key suit */ /* key suit case has been included in the previous one */
+			    ///*********************** index1 to index2 is the range to win this round, it could be empty ***********************///
+			    while(index1 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index1)>type) { index1++; }
+			    while(index2 < suit_cs.size() && (suit_cs.get_Structure_Node_Type(index2)>type ||
+							      (suit_cs.get_Structure_Node_Type(index2)==type
+							       && suit_cs.get_Structure_Node_Start(index2)>start))) { index2++; }
+
+			    ///*********************** choose 10, 13, 5 first if it exists in range index1 to index2 ****************************///
+			    for (int k=index2-1; k>=index1; k--) {
+				if (index_to_number(suit_cs.get_Structure_Node_Start(k))==10) {
+				    System.out.println("Suggestion: type" + type + " " + suit + 10);
+				    pass = true;
+				    suit_cs.get_Structure_List().remove(k);
+				    break;
+				}
+				if (index_to_number(suit_cs.get_Structure_Node_Start(k))==13) {
+				    System.out.println("Suggestion: type" + type + " " + suit + 13);
+				    pass = true;
+				    suit_cs.get_Structure_List().remove(k);
+				    break;
+				}
+			    }
+			    if (!pass) {
+				for(int k=index1; k<index2; k++) {
+				    if (index_to_number(suit_cs.get_Structure_Node_Start(k))==5) {
+					System.out.println("Suggestion: type" + type + " " + suit + 5);
+					pass = true;
+					suit_cs.get_Structure_List().remove(k);
+					break;
+				    }
+				}
+			    }
+			    /// ************************* if not pass && range is not empty, choose the smallest one in the range *****************///
+			    if (!pass && index2-index1>0) {
+				System.out.println("Suggestion: type" + type + " " + suit + index_to_number(suit_cs.get_Structure_Node_Start(index2-1)));
+				suit_cs.get_Structure_List().remove(index2-1);
+				pass = true;
+			    }
+			    /// ************************************  index1 to index2 is empty here **********************************************///
+			    if (!pass) {
+				while(index2 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index2)>=type) { index2++; }
+				System.out.println("Suggestion: type" + type + " " + suit + index_to_number(suit_cs.get_Structure_Node_Start(index2-1)));
+				suit_cs.get_Structure_List().remove(index2-1);
+			    }
+ 			}
+			else if (!pass && suit_cs.get_Structure_Node_Type(0) < type) {
+			    /* suit_cs.get_Structure_Node_Type(0)==1 */
+			    /* Impossible to win in this case */
+			    int target=0;
+			    for(int k=suit_cs.size()-1; k>=0; k--) {
+				if (target<2
+				    && index_to_number(suit_cs.get_Structure_Node_Start(k))!=10
+				    && index_to_number(suit_cs.get_Structure_Node_Start(k))!=13
+				    && index_to_number(suit_cs.get_Structure_Node_Start(k))!=5) {
+				    System.out.println("Suggestion: type1" + " " + suit + index_to_number(suit_cs.get_Structure_Node_Start(k)));
+				    target++;
+				    suit_cs.get_Structure_List().remove(k);
+				}
+			    }
+			    //=============================== This part can be replaced with a previous ection =======================================//
+			    if (target<2) {
+				for(int k=0; k<suit_cs.size(); k++) {
+				    if (index_to_number(suit_cs.get_Structure_Node_Start(k))==5) {
+					System.out.println("Suggestion: type1" + " " + suit + 5);
+					pass = true;
+					target++;
+					suit_cs.get_Structure_List().remove(k);
+					break;
+				    }
+				}
+			    }
+			    if (target<2) {
+				for(int k=0; k<suit_cs.size(); k++) {
+				    if (index_to_number(suit_cs.get_Structure_Node_Start(k))==10) {
+					System.out.println("Suggestion: type1" + " " + suit + 10);
+					pass = true;
+					target++;
+					suit_cs.get_Structure_List().remove(k);
+					break;
+				    }
+				}
+			    }
+			    if (target<2) {
+				for(int k=0; k<suit_cs.size(); k++) {
+				    if (index_to_number(suit_cs.get_Structure_Node_Start(k))==13) {
+					System.out.println("Suggestion: type1" + " " + suit + 13);
+					pass = true;
+					target++;
+					suit_cs.get_Structure_List().remove(k);
+					break;
+				    }
+				}
+			    }
+			    //========================================================================================================================//
+			}
+			else if (!pass && suit_cs.get_Structure_Node_Type(0) > type) {
+			    if (type==2) {
+				if (index_to_number(suit_cs.get_Structure_Node_Start(0))!=10
+				   && index_to_number(suit_cs.get_Structure_Node_Start(0))!=13
+				   && index_to_number(suit_cs.get_Structure_Node_Start(0))!=5) {
+				    System.out.println("Suggestion: type2 " + suit + index_to_number(suit_cs.get_Structure_Node_Start(0)));
+				    suit_cs.change_Node(0,suit_cs.get_Structure_Node_Type(0)-2,suit_cs.get_Structure_Node_Start(0)+1);
+				    pass = true;
+				    Collections.sort(suit_cs.get_Structure_List());
+				}
+				if (!pass && (index_to_number(suit_cs.get_Structure_Node_Start(0)+suit_cs.get_Structure_Node_Type(0)/2-1)!=10
+					      && index_to_number(suit_cs.get_Structure_Node_Start(0)+suit_cs.get_Structure_Node_Type(0)/2-1)!=13
+					      && index_to_number(suit_cs.get_Structure_Node_Start(0)+suit_cs.get_Structure_Node_Type(0)/2-1)!=5)) {
+				    System.out.println("Suggestion: type2 " + suit +
+						       index_to_number(suit_cs.get_Structure_Node_Start(0)+suit_cs.get_Structure_Node_Type(0)/2-1));
+				    pass = true;
+				    suit_cs.change_Node(0,suit_cs.get_Structure_Node_Type(0)-2,suit_cs.get_Structure_Node_Start(0));
+				    Collections.sort(suit_cs.get_Structure_List());
+				}
+			    }
+			    else if (type==1) {
+				if (suit_cs.get_Type_Counts(2)==0) {
+				    //////////////////****** Something added here *****/////////////////
+				    int type0 = suit_cs.get_Structure_Node_Type(0);
+				    int start0 = suit_cs.get_Structure_Node_Start(0);
+				    suit_cs.get_Structure_List().remove(0);
+				    for(int s=0; s<type0/2; s++) {
+					suit_cs.add_Node(2,start0+s);
+				    }
+				    Collections.sort(suit_cs.get_Structure_List());
+				}
+				if (suit_cs.get_Type_Counts(2)>0) {
+				    while(index1 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index1)>2) { index1++; }
+				    while(index2 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index2)>=2) { index2++; }
+			        
+				    for (int k=index2-1; k>=index1; k--) {
+					if (index_to_number(suit_cs.get_Structure_Node_Start(k))!=10
+					    && index_to_number(suit_cs.get_Structure_Node_Start(k))!=13
+					    && index_to_number(suit_cs.get_Structure_Node_Start(k))!=5) {
+					    System.out.println("Suggestion: type1 " + suit + index_to_number(suit_cs.get_Structure_Node_Start(k)));
+					    pass = true;
+					    suit_cs.change_Node(k,1,suit_cs.get_Structure_Node_Start(k));
+					    Collections.sort(suit_cs.get_Structure_List());
+					    break;
+					}
+				    }
+				    if (!pass) {
 					System.out.println("Suggestion: type1 " + suit + index_to_number(suit_cs.get_Structure_Node_Start(index2-1)));
 					pass = true;
 					suit_cs.change_Node(index2-1,1,suit_cs.get_Structure_Node_Start(index2-1));
 					Collections.sort(suit_cs.get_Structure_List());
 				    }
 				}
-				else {
-				    //////////////////******//**** Add something here *****///***///////////////// 
-				}
+		        	
 			    }
 			} 
+			
 		    }
-		}
-		else if ((winner_ID-playerID)%2!=0 && gameInfo.get_Current_Structure().get_Structure_Node_Type(0)<=2) {
-		    if (gameInfo.get_Current_Structure().size()>1 || gameInfo.players[winner_ID].get_Play_Structure().get_Uniform_Suit()==gameInfo.get_Key_Suit()) {
+
+		    if(gameInfo.get_Current_Structure().size()>1 || gameInfo.players[winner_ID].get_Play_Structure().get_Uniform_Suit()==gameInfo.get_Key_Suit()) {
 			/* Impossible to win in this case */
 			for(int i=0; i<gameInfo.get_Current_Structure().size(); i++) {
 			    pass = false;
 			    type = gameInfo.get_Current_Structure().get_Structure_Node_Type(i);
-			    
+			    start = gameInfo.get_Current_Structure().get_Structure_Node_Start(i);
 			    counts = suit_cs.get_Type_Counts(type);
 			    index1 = 0;
 			    index2 = 0;
-		  
+			    
+			    if (type>=4) {
+				if(counts>0) {
+				    while(index1 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index1)>type) { index1++; }
+				    while(index2 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index2)>=type) { index2++; }
+				    suit_cs.get_Structure_List().remove(index2-1);
+				    System.out.println("Suggestion: type" + type + " " + suit + " start " + suit_cs.get_Structure_Node_Start(index2-1));
+				    continue;
+				}
+				if(counts==0 && suit_cs.get_Structure_Node_Type(0)<type) {
+				    System.out.println("Here1");
+				    gameInfo.get_Current_Structure().change_Node(i, type-2, start+1);
+				    gameInfo.get_Current_Structure().add_Node(2,start);
+				    Collections.sort(gameInfo.get_Current_Structure().get_Structure_List());
+				    i--;
+				    continue;
+				}
+				if(counts==0 && suit_cs.get_Structure_Node_Type(0)>type) {
+				    suit_cs.change_Node(0,suit_cs.get_Structure_Node_Type(0)-type, suit_cs.get_Structure_Node_Start(0)+type/2);
+				    Collections.sort(suit_cs.get_Structure_List());
+				    continue;
+				}
+			    }
+			    
 			    if (counts>0) {
 				while(index1 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index1)>type) { index1++; }
 				while(index2 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index2)>=type) { index2++; }
@@ -484,168 +738,23 @@ public abstract class Player {
 					}
 				    }
 				    else {
-					////////////******************/////////////// 
+					//////////////////****** Something added here *****/////////////////
+					int type0 = suit_cs.get_Structure_Node_Type(0);
+					int start0 = suit_cs.get_Structure_Node_Start(0);
+					suit_cs.get_Structure_List().remove(0);
+					for(int s=0; s<type0/2; s++) {
+					    suit_cs.add_Node(2,start0+s);
+					}
+					Collections.sort(suit_cs.get_Structure_List());
+					i--;
 				    }
 				}
 			    } 
 			}
 		    }
-		    else {
-			/* Possible to win */
-		        type = gameInfo.players[winner_ID].get_Play_Structure().get_Structure_Node_Type(0);
-			start = gameInfo.players[winner_ID].get_Play_Structure().get_Structure_Node_Start(0);
-			counts = suit_cs.get_Type_Counts(type);
-			index1 = 0;
-			index2 = 0;
-			pass = false;
-			if (counts>0) {
-			    /* Has the possibility to win in this case, need to check key suit */ /* key suit case has been included in the previous one */
-			    ///*********************** index1 to index2 is the range to win this round, it could be empty ***********************///
-			    while(index1 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index1)>type) { index1++; }
-			    while(index2 < suit_cs.size() && (suit_cs.get_Structure_Node_Type(index2)>type ||
-							      (suit_cs.get_Structure_Node_Type(index2)==type
-							       && suit_cs.get_Structure_Node_Start(index2)>start))) { index2++; }
-
-			    ///*********************** choose 10, 13, 5 first if it exists in range index1 to index2 ****************************///
-			    for (int k=index2-1; k>=index1; k--) {
-				if (index_to_number(suit_cs.get_Structure_Node_Start(k))==10) {
-				    System.out.println("Suggestion: type" + type + " " + suit + 10);
-				    pass = true;
-				    suit_cs.get_Structure_List().remove(k);
-				    break;
-				}
-				if (index_to_number(suit_cs.get_Structure_Node_Start(k))==13) {
-				    System.out.println("Suggestion: type" + type + " " + suit + 13);
-				    pass = true;
-				    suit_cs.get_Structure_List().remove(k);
-				    break;
-				}
-			    }
-			    if (!pass) {
-				for(int k=index1; k<index2; k++) {
-				    if (index_to_number(suit_cs.get_Structure_Node_Start(k))==5) {
-					System.out.println("Suggestion: type" + type + " " + suit + 5);
-					pass = true;
-					suit_cs.get_Structure_List().remove(k);
-					break;
-				    }
-				}
-			    }
-			    /// ************************* if not pass && range is not empty, choose the smallest one in the range *****************///
-			    if (!pass && index2-index1>0) {
-				System.out.println("Suggestion: type" + type + " " + suit + index_to_number(suit_cs.get_Structure_Node_Start(index2-1)));
-				suit_cs.get_Structure_List().remove(index2-1);
-				pass = true;
-			    }
-			    /// ************************************  index1 to index2 is empty here **********************************************///
-			    if (!pass) {
-				while(index2 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index2)>=type) { index2++; }
-				System.out.println("Suggestion: type" + type + " " + suit + index_to_number(suit_cs.get_Structure_Node_Start(index2-1)));
-				suit_cs.get_Structure_List().remove(index2-1);
-			    }
- 			}
-			else if (suit_cs.get_Structure_Node_Type(0) < type) {
-			    /* suit_cs.get_Structure_Node_Type(0)==1 */
-			    /* Impossible to win in this case */
-			    int target=0;
-			    for(int k=suit_cs.size()-1; k>=0; k--) {
-				if (target<2
-				    && index_to_number(suit_cs.get_Structure_Node_Start(k))!=10
-				    && index_to_number(suit_cs.get_Structure_Node_Start(k))!=13
-				    && index_to_number(suit_cs.get_Structure_Node_Start(k))!=5) {
-				    System.out.println("Suggestion: type1" + " " + suit + index_to_number(suit_cs.get_Structure_Node_Start(k)));
-				    target++;
-				    suit_cs.get_Structure_List().remove(k);
-				}
-			    }
-			    //=============================== This part can be replaced with a previous ection =======================================//
-			    if (target<2) {
-				for(int k=0; k<suit_cs.size(); k++) {
-				    if (index_to_number(suit_cs.get_Structure_Node_Start(k))==5) {
-					System.out.println("Suggestion: type1" + " " + suit + 5);
-					pass = true;
-					target++;
-					suit_cs.get_Structure_List().remove(k);
-					break;
-				    }
-				}
-			    }
-			    if (target<2) {
-				for(int k=0; k<suit_cs.size(); k++) {
-				    if (index_to_number(suit_cs.get_Structure_Node_Start(k))==10) {
-					System.out.println("Suggestion: type1" + " " + suit + 10);
-					pass = true;
-					target++;
-					suit_cs.get_Structure_List().remove(k);
-					break;
-				    }
-				}
-			    }
-			    if (target<2) {
-				for(int k=0; k<suit_cs.size(); k++) {
-				    if (index_to_number(suit_cs.get_Structure_Node_Start(k))==13) {
-					System.out.println("Suggestion: type1" + " " + suit + 13);
-					pass = true;
-					target++;
-					suit_cs.get_Structure_List().remove(k);
-					break;
-				    }
-				}
-			    }
-			    //========================================================================================================================//
-			}
-			else if (suit_cs.get_Structure_Node_Type(0) > type) {
-			    if (type==2) {
-				if (index_to_number(suit_cs.get_Structure_Node_Start(0))!=10
-				   && index_to_number(suit_cs.get_Structure_Node_Start(0))!=13
-				   && index_to_number(suit_cs.get_Structure_Node_Start(0))!=5) {
-				    System.out.println("Suggestion: type2 " + suit + index_to_number(suit_cs.get_Structure_Node_Start(0)));
-				    suit_cs.change_Node(0,suit_cs.get_Structure_Node_Type(0)-2,suit_cs.get_Structure_Node_Start(0)+1);
-				    pass = true;
-				    Collections.sort(suit_cs.get_Structure_List());
-				}
-				if (!pass && (index_to_number(suit_cs.get_Structure_Node_Start(0)+suit_cs.get_Structure_Node_Type(0)/2-1)!=10
-					      && index_to_number(suit_cs.get_Structure_Node_Start(0)+suit_cs.get_Structure_Node_Type(0)/2-1)!=13
-					      && index_to_number(suit_cs.get_Structure_Node_Start(0)+suit_cs.get_Structure_Node_Type(0)/2-1)!=5)) {
-				    System.out.println("Suggestion: type2 " + suit +
-						       index_to_number(suit_cs.get_Structure_Node_Start(0)+suit_cs.get_Structure_Node_Type(0)/2-1));
-				    pass = true;
-				    suit_cs.change_Node(0,suit_cs.get_Structure_Node_Type(0)-2,suit_cs.get_Structure_Node_Start(0));
-				    Collections.sort(suit_cs.get_Structure_List());
-				}
-			    }
-			    else if (type==1) {
-				if (suit_cs.get_Type_Counts(2)>0) {
-				    while(index1 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index1)>2) { index1++; }
-				    while(index2 < suit_cs.size() && suit_cs.get_Structure_Node_Type(index2)>=2) { index2++; }
-			        
-				    for (int k=index2-1; k>=index1; k--) {
-					if (index_to_number(suit_cs.get_Structure_Node_Start(k))!=10
-					    && index_to_number(suit_cs.get_Structure_Node_Start(k))!=13
-					    && index_to_number(suit_cs.get_Structure_Node_Start(k))!=5) {
-					    System.out.println("Suggestion: type1 " + suit + index_to_number(suit_cs.get_Structure_Node_Start(k)));
-					    pass = true;
-					    suit_cs.change_Node(k,1,suit_cs.get_Structure_Node_Start(k));
-					    Collections.sort(suit_cs.get_Structure_List());
-					    break;
-					}
-				    }
-				    if (!pass) {
-					System.out.println("Suggestion: type1 " + suit + index_to_number(suit_cs.get_Structure_Node_Start(index2-1)));
-					pass = true;
-					suit_cs.change_Node(index2-1,1,suit_cs.get_Structure_Node_Start(index2-1));
-					Collections.sort(suit_cs.get_Structure_List());
-				    }
-				}
-				else {
-				    ////////////**************** Similar as a previous part ***************/////////////// 
-				}
-			    }
-			} 
-
-		    }
 		}
 	    }
+	    gameInfo.get_Current_Structure().generateStructure();
 	}
     }
 
