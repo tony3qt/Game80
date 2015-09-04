@@ -40,7 +40,9 @@ public class Shuffle {
 	}
 	Card tempCard = new Card();
 	int tempIndex;
-	Random randomGenerator = new Random();
+	long seed = 12345678910L;
+	seed = 13245678910L;
+	Random randomGenerator = new Random(seed);
 	for(int i=0;i<Npackage*GameInfo.CARD_IN_EACH_PACKAGE;i++) {
 	    tempCard = allCards[i];
 	    tempIndex =
